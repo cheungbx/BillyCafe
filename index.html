@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billy's Coffee | 手沖精品咖啡 & 豆單</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Noto+Serif+TC:wght@300;400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind Custom Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        coffee: {
+                            50: '#FDFBF7',
+                            100: '#F7F2EA',
+                            200: '#EAE0D0',
+                            300: '#D5C3A5',
+                            400: '#B89D77',
+                            500: '#9B784E',
+                            600: '#7E5B37',
+                            700: '#5F4125',
+                            800: '#422C19',
+                            900: '#2A1B0E',
+                            950: '#1A0E07',
+                        },
+                        amberGlow: '#E0A96D',
+                    },
+                    fontFamily: {
+                        serif: ['Cinzel', 'Noto Serif TC', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'Noto Sans TC', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1A0E07;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #5F4125;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9B784E;
+        }
+
+        /* Background Steam Canvas */
+        #steamCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Glassmorphism subtle panel */
+        .glass-panel {
+            background: rgba(26, 14, 7, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(224, 169, 109, 0.12);
+        }
+
+        .glass-card {
+            background: rgba(42, 27, 14, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(224, 169, 109, 0.15);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(224, 169, 109, 0.4);
+            box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.7), 0 0 20px rgba(224, 169, 109, 0.15);
+        }
+
+        .glow-text {
+            text-shadow: 0 0 15px rgba(224, 169, 109, 0.3);
+        }
+
+        /* Pulse animation for active audio indicator */
+        @keyframes subtlePulse {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+        .pulse-subtle {
+            animation: subtlePulse 3s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-coffee-950 text-coffee-100 font-sans min-h-screen relative selection:bg-coffee-500 selection:text-white overflow-x-hidden">
+
+    <!-- Interactive Background Canvas for Ambient Steam & Dust Particles -->
+    <canvas id="steamCanvas"></canvas>
+
+    <!-- Main Wrapper -->
+    <div class="relative z-10 flex flex-col min-h-screen">
+
+        <!-- Header / Navigation Bar -->
+        <header class="sticky top-0 z-50 glass-panel border-b border-coffee-800/50 px-4 lg:px-8 py-4 transition-all">
+            <div class="max-w-7xl mx-auto flex items-center justify-between">
+                <!-- Brand Title -->
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-coffee-500 to-coffee-800 flex items-center justify-center text-amberGlow shadow-lg border border-coffee-400/30">
+                        <i class="fa-solid fa-mug-hot text-xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-serif text-xl md:text-2xl font-bold tracking-wider text-amberGlow glow-text">
+                            BILLY'S COFFEE
+                        </h1>
+                        <p class="text-xs text-coffee-300 font-light tracking-widest uppercase">Specialty Coffee & Micro-Lot Lab</p>
+                    </div>
+                </div>
+
+                <!-- Navigation Quick Links & Ambient Audio Switcher -->
+                <div class="flex items-center gap-3 md:gap-6">
+                    <!-- Ambient Sound Control Box -->
+                    <button id="ambientAudioBtn" onclick="toggleAmbientSound()" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-coffee-900/80 hover:bg-coffee-800 border border-coffee-700/60 text-xs text-coffee-200 transition-all shadow-inner group">
+                        <span class="relative flex h-2 w-2">
+                          <span id="audioPing" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-0"></span>
+                          <span id="audioDot" class="relative inline-flex rounded-full h-2 w-2 bg-coffee-500"></span>
+                        </span>
+                        <i class="fa-solid fa-cloud-rain text-amberGlow/80 group-hover:text-amberGlow transition"></i>
+                        <span id="audioStatusText" class="hidden sm:inline">環境音效 : 關閉</span>
+                    </button>
+
+                    <!-- Nav Links -->
+                    <nav class="hidden md:flex items-center gap-6 text-sm text-coffee-200">
+                        <a href="#menu-section" class="hover:text-amberGlow transition-colors">熟豆單 (SOE)</a>
+                        <a href="#green-section" class="hover:text-amberGlow transition-colors">生豆庫存</a>
+                        <a href="#timer-section" class="hover:text-amberGlow transition-colors">手沖計時器</a>
+                    </nav>
+
+                    <!-- Cart / Reservation Badge -->
+                    <button onclick="toggleCartDrawer()" class="relative p-2.5 rounded-full bg-coffee-800/80 hover:bg-coffee-700 text-amberGlow transition border border-coffee-600/30">
+                        <i class="fa-solid fa-basket-shopping"></i>
+                        <span id="cartCountBadge" class="absolute -top-1 -right-1 bg-amberGlow text-coffee-950 font-bold text-[10px] w-5 h-5 rounded-full flex items-center justify-center border-2 border-coffee-950 opacity-0 scale-75 transition-all">0</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Hero Ambient Banner -->
+        <section class="relative py-16 md:py-24 px-4 overflow-hidden border-b border-coffee-800/40">
+            <div class="max-w-4xl mx-auto text-center relative z-10 space-y-6">
+                <span class="inline-block px-4 py-1.5 rounded-full text-xs font-medium tracking-widest bg-coffee-900/90 text-amberGlow border border-coffee-600/40 uppercase">
+                    Hand-Crafted Pour Over & Green Beans Selection
+                </span>
+                <h2 class="font-serif text-3xl md:text-5xl lg:text-6xl text-coffee-50 leading-tight">
+                    沉浸於每一滴 <span class="text-transparent bg-clip-text bg-gradient-to-r from-amberGlow via-amber-200 to-coffee-300">純粹咖香</span>
+                </h2>
+                <p class="text-coffee-300 max-w-2xl mx-auto text-sm md:text-base leading-relaxed font-light">
+                    歡迎來到 Billy's Coffee。這裡展示了精心精選與親自烘焙的精品 SOE 單品豆，從埃塞俄比亞的經典花果香，到雲南微批次的精緻風味。點擊豆單即可查看詳細手沖建議與風味地圖。
+                </p>
+
+                <!-- Quick Stats Bar -->
+                <div class="pt-6 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto text-left">
+                    <div class="p-4 rounded-xl glass-panel border border-coffee-700/30">
+                        <div class="text-xs text-coffee-400">熟豆品項 SOE</div>
+                        <div class="text-2xl font-serif text-amberGlow font-bold">13 <span class="text-xs font-sans text-coffee-300">款</span></div>
+                    </div>
+                    <div class="p-4 rounded-xl glass-panel border border-coffee-700/30">
+                        <div class="text-xs text-coffee-400">精選生豆庫存</div>
+                        <div class="text-2xl font-serif text-amberGlow font-bold">5 <span class="text-xs font-sans text-coffee-300">款</span></div>
+                    </div>
+                    <div class="p-4 rounded-xl glass-panel border border-coffee-700/30">
+                        <div class="text-xs text-coffee-400">代表產區</div>
+                        <div class="text-xl font-serif text-amberGlow font-bold">埃塞 / 哥倫比亞 / 雲南</div>
+                    </div>
+                    <div class="p-4 rounded-xl glass-panel border border-coffee-700/30">
+                        <div class="text-xs text-coffee-400">環境氛圍</div>
+                        <div class="text-xl font-serif text-amberGlow font-bold flex items-center gap-1.5">
+                            <i class="fa-solid fa-mug-saucer text-sm"></i> Relax Mode
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Filter & Search Controls -->
+        <section class="max-w-7xl mx-auto w-full px-4 pt-10 pb-4">
+            <div class="glass-panel p-4 md:p-6 rounded-2xl flex flex-col md:flex-row gap-4 items-center justify-between shadow-2xl">
+                <!-- Search Bar -->
+                <div class="relative w-full md:w-80">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-coffee-400 text-sm"></i>
+                    <input type="text" id="searchInput" oninput="filterCoffees()" placeholder="搜尋豆名、產區 (如：瑰夏, 耶加雪菲, 雲南)..." 
+                        class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-coffee-950/80 border border-coffee-700/60 text-coffee-100 placeholder-coffee-500 text-sm focus:outline-none focus:border-amberGlow transition">
+                </div>
+
+                <!-- Origin / Category Filter Pills -->
+                <div class="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-none text-xs">
+                    <button onclick="setFilter('all')" class="filter-btn active-filter px-4 py-2 rounded-xl border border-amberGlow bg-amberGlow text-coffee-950 font-semibold transition whitespace-nowrap" data-filter="all">全部</button>
+                    <button onclick="setFilter('SOE')" class="filter-btn px-4 py-2 rounded-xl border border-coffee-700 bg-coffee-900/60 hover:border-coffee-500 text-coffee-200 transition whitespace-nowrap" data-filter="SOE">手沖熟豆</button>
+                    <button onclick="setFilter('GREEN')" class="filter-btn px-4 py-2 rounded-xl border border-coffee-700 bg-coffee-900/60 hover:border-coffee-500 text-coffee-200 transition whitespace-nowrap" data-filter="GREEN">生豆庫存</button>
+                    <button onclick="setFilter('Ethiopia')" class="filter-btn px-4 py-2 rounded-xl border border-coffee-700 bg-coffee-900/60 hover:border-coffee-500 text-coffee-200 transition whitespace-nowrap" data-filter="Ethiopia">埃塞俄比亞</button>
+                    <button onclick="setFilter('Colombia')" class="filter-btn px-4 py-2 rounded-xl border border-coffee-700 bg-coffee-900/60 hover:border-coffee-500 text-coffee-200 transition whitespace-nowrap" data-filter="Colombia">哥倫比亞</button>
+                    <button onclick="setFilter('Yunnan')" class="filter-btn px-4 py-2 rounded-xl border border-coffee-700 bg-coffee-900/60 hover:border-coffee-500 text-coffee-200 transition whitespace-nowrap" data-filter="Yunnan">雲南</button>
+                    <button onclick="setFilter('Gesha')" class="filter-btn px-4 py-2 rounded-xl border border-coffee-700 bg-coffee-900/60 hover:border-coffee-500 text-coffee-200 transition whitespace-nowrap" data-filter="Gesha">瑰夏專區</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Roasted Coffee SOE Section -->
+        <main class="max-w-7xl mx-auto w-full px-4 py-8 space-y-12 flex-1">
+
+            <!-- Hand Drip SOE Section -->
+            <section id="menu-section" class="space-y-6">
+                <div class="flex items-center justify-between border-b border-coffee-800 pb-3">
+                    <div class="flex items-center gap-3">
+                        <span class="w-3 h-3 rounded-full bg-amberGlow inline-block shadow-[0_0_10px_#E0A96D]"></span>
+                        <h3 class="font-serif text-2xl font-bold text-amberGlow">手沖咖啡 SOE (已烘焙熟豆)</h3>
+                    </div>
+                    <span class="text-xs text-coffee-400 font-mono" id="soeCountLabel">共 13 款特選</span>
+                </div>
+
+                <!-- Coffee Grid for Roasted Beans -->
+                <div id="soeGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Cards will be dynamically rendered via JS -->
+                </div>
+            </section>
+
+            <!-- Green Beans Section -->
+            <section id="green-section" class="space-y-6 pt-6">
+                <div class="flex items-center justify-between border-b border-coffee-800 pb-3">
+                    <div class="flex items-center gap-3">
+                        <span class="w-3 h-3 rounded-full bg-emerald-500 inline-block shadow-[0_0_10px_#10B981]"></span>
+                        <h3 class="font-serif text-2xl font-bold text-emerald-400">生豆 SOE (特選原豆庫存)</h3>
+                    </div>
+                    <span class="text-xs text-coffee-400 font-mono" id="greenCountLabel">共 5 款原豆</span>
+                </div>
+
+                <!-- Green Beans Grid -->
+                <div id="greenGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Dynamic rendering -->
+                </div>
+            </section>
+
+            <!-- Interactive Pour-over Timer Section -->
+            <section id="timer-section" class="pt-8">
+                <div class="glass-panel rounded-3xl p-6 md:p-10 border border-coffee-700/50 relative overflow-hidden">
+                    <div class="max-w-3xl mx-auto text-center space-y-6">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-coffee-900 text-amberGlow text-xs border border-coffee-700">
+                            <i class="fa-solid fa-stopwatch"></i> Billy's Hand-Drip Brew Helper
+                        </div>
+                        <h3 class="font-serif text-3xl font-bold text-coffee-100">經典手沖 4:6 比例計時助手</h3>
+                        <p class="text-xs md:text-sm text-coffee-300">
+                            選取你的咖啡粉量，按照時間節奏進行悶蒸與分段注水，帶出最佳層次口感。
+                        </p>
+
+                        <!-- Brew Timer Controls -->
+                        <div class="glass-card p-6 rounded-2xl border border-coffee-700/50 max-w-md mx-auto space-y-6">
+                            <!-- Coffee Powder Weight Input -->
+                            <div class="flex items-center justify-between border-b border-coffee-800 pb-4 text-sm">
+                                <label class="text-coffee-300">咖啡粉量 (g):</label>
+                                <div class="flex items-center gap-3">
+                                    <button onclick="adjustDose(-1)" class="w-8 h-8 rounded-lg bg-coffee-800 text-amberGlow hover:bg-coffee-700 flex items-center justify-center font-bold">-</button>
+                                    <span id="doseWeight" class="font-mono text-lg text-amberGlow font-bold">15</span>
+                                    <button onclick="adjustDose(1)" class="w-8 h-8 rounded-lg bg-coffee-800 text-amberGlow hover:bg-coffee-700 flex items-center justify-center font-bold">+</button>
+                                </div>
+                            </div>
+
+                            <!-- Target Water Calculation -->
+                            <div class="grid grid-cols-2 gap-4 text-center text-xs">
+                                <div class="p-3 bg-coffee-950/60 rounded-xl border border-coffee-800">
+                                    <div class="text-coffee-400">總注入水圍 (1:15)</div>
+                                    <div id="targetWater" class="font-mono text-lg font-bold text-amberGlow mt-1">225 ml</div>
+                                </div>
+                                <div class="p-3 bg-coffee-950/60 rounded-xl border border-coffee-800">
+                                    <div class="text-coffee-400">建議水溫</div>
+                                    <div class="font-mono text-lg font-bold text-emerald-400 mt-1">90 - 92°C</div>
+                                </div>
+                            </div>
+
+                            <!-- Timer Display -->
+                            <div class="py-4">
+                                <div id="timerDisplay" class="font-mono text-5xl md:text-6xl font-bold text-amberGlow tracking-wider">
+                                    00:00
+                                </div>
+                                <p id="brewStepText" class="text-xs text-coffee-300 mt-2 h-6">點擊開始進行手沖程序</p>
+                            </div>
+
+                            <!-- Timer Buttons -->
+                            <div class="flex items-center justify-center gap-4">
+                                <button id="startTimerBtn" onclick="toggleTimer()" class="px-6 py-2.5 rounded-xl bg-amberGlow text-coffee-950 font-bold hover:bg-amber-300 transition flex items-center gap-2 shadow-lg">
+                                    <i id="playIcon" class="fa-solid fa-play"></i>
+                                    <span id="startBtnText">開始沖煮</span>
+                                </button>
+                                <button onclick="resetTimer()" class="px-4 py-2.5 rounded-xl bg-coffee-800 hover:bg-coffee-700 text-coffee-200 transition">
+                                    <i class="fa-solid fa-rotate-right"></i> 重置
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="glass-panel border-t border-coffee-800/60 mt-16 py-8 px-4 text-center text-xs text-coffee-400">
+            <div class="max-w-7xl mx-auto space-y-3">
+                <div class="font-serif text-lg text-amberGlow font-bold">BILLY'S COFFEE</div>
+                <p class="text-coffee-300">帶給您寧靜放鬆的每一杯手沖時光</p>
+                <p class="text-coffee-500 font-mono">© 2026 Billy's Coffee. All roasted micro-lots preserved with passion.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Coffee Detail Modal -->
+    <div id="detailModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300">
+        <div class="glass-panel max-w-lg w-full rounded-2xl border border-coffee-600/50 overflow-hidden p-6 relative space-y-5 transform scale-95 transition-all" id="modalCard">
+            <!-- Close Button -->
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-coffee-400 hover:text-amberGlow transition text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <!-- Modal Content (Injected by JS) -->
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- Cart / Reservation Slide Drawer -->
+    <div id="cartDrawer" class="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-coffee-950/95 border-l border-coffee-800 backdrop-blur-xl p-6 shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col justify-between">
+        <div class="space-y-6">
+            <div class="flex items-center justify-between border-b border-coffee-800 pb-4">
+                <h3 class="font-serif text-xl font-bold text-amberGlow flex items-center gap-2">
+                    <i class="fa-solid fa-basket-shopping"></i> 我的預訂清單
+                </h3>
+                <button onclick="toggleCartDrawer()" class="text-coffee-400 hover:text-amberGlow text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div id="cartItemsList" class="space-y-3 max-h-[60vh] overflow-y-auto pr-1">
+                <!-- Cart items dynamically listed -->
+                <p class="text-center text-xs text-coffee-500 py-10">預訂清單目前是空的</p>
+            </div>
+        </div>
+
+        <div class="space-y-4 border-t border-coffee-800 pt-4">
+            <div class="flex justify-between text-sm">
+                <span class="text-coffee-300">預計總重:</span>
+                <span id="cartTotalWeight" class="font-mono text-amberGlow font-bold">0 g</span>
+            </div>
+            <button onclick="sendReservation()" class="w-full py-3 rounded-xl bg-gradient-to-r from-amberGlow to-coffee-500 text-coffee-950 font-bold hover:brightness-110 transition shadow-lg">
+                複製預訂文字清單
+            </button>
+        </div>
+    </div>
+
+    <script>
+        /* Raw Raw Coffee Data provided by user */
+        const coffeeDatabase = [
+            // --- 手沖咖啡 SOE ---
+            {
+                id: 'soe-1',
+                type: 'SOE',
+                name: '埃塞俄比亞耶加雪菲孔加 水洗G1',
+                origin: '埃塞俄比亞 (Ethiopia)',
+                regionKey: 'Ethiopia',
+                process: '水洗 G1',
+                processKey: 'Wash',
+                date: '2026-03-31',
+                weight: 101,
+                variety: '原生種 Heirloom',
+                notes: ['茉莉花香', '檸檬柑橘', '白桃', '綠茶尾韻'],
+                roastLevel: '淺烘焙 Light Roast',
+                score: '91.5'
+            },
+            {
+                id: 'soe-2',
+                type: 'SOE',
+                name: '埃塞俄比亞耶加雪菲果丁丁 G1 水洗',
+                origin: '埃塞俄比亞 (Ethiopia)',
+                regionKey: 'Ethiopia',
+                process: '水洗 G1',
+                processKey: 'Wash',
+                date: '2026-03-30',
+                weight: 120, // estimated available
+                variety: '原生種 Heirloom',
+                notes: ['佛手柑', '橙花', '蜂蜜水', '多汁柑橘'],
+                roastLevel: '淺烘焙 Light Roast',
+                score: '92.0'
+            },
+            {
+                id: 'soe-3',
+                type: 'SOE',
+                name: '埃塞俄比亞 Lem Kaffa 瑰夏',
+                origin: '埃塞俄比亞 (Ethiopia)',
+                regionKey: 'Ethiopia',
+                process: '水洗/精細處理',
+                processKey: 'Wash',
+                date: '2026-04-08',
+                weight: 165,
+                variety: '瑰夏 Gesha',
+                notes: ['野薑花', '紅葡萄', '佛手柑', '優雅花甜'],
+                roastLevel: '極淺烘焙 Ultra Light',
+                score: '93.5'
+            },
+            {
+                id: 'soe-4',
+                type: 'SOE',
+                name: '埃塞俄比亞 瑰夏 日曬',
+                origin: '埃塞俄比亞 (Ethiopia)',
+                regionKey: 'Ethiopia',
+                process: '日曬 Natural',
+                processKey: 'Natural',
+                date: '2026-01-03',
+                weight: 143,
+                variety: '瑰夏 Gesha',
+                notes: ['藍莓草莓', '百香果', '葡萄酒香', '濃郁花果'],
+                roastLevel: '淺中烘焙 Light Medium',
+                score: '93.0'
+            },
+            {
+                id: 'soe-5',
+                type: 'SOE',
+                name: '埃塞俄比亞班奇馬吉瑰夏 水洗',
+                origin: '埃塞俄比亞 Bench Maji',
+                regionKey: 'Ethiopia',
+                process: '水洗 Wash',
+                processKey: 'Wash',
+                date: '2026-03-26',
+                weight: 113,
+                variety: '瑰夏 Gesha',
+                notes: ['小白花', '水蜜桃', '荔枝', '高山烏龍茶'],
+                roastLevel: '淺烘焙 Light Roast',
+                score: '92.8'
+            },
+            {
+                id: 'soe-6',
+                type: 'SOE',
+                name: '哥倫比亞天堂92 瑰夏 水洗',
+                origin: '哥倫比亞 (Colombia)',
+                regionKey: 'Colombia',
+                process: '水洗/雙重厭氧發酵',
+                processKey: 'Wash',
+                date: '2026-07-29',
+                weight: 46,
+                variety: '瑰夏 Gesha',
+                notes: ['玫瑰花茶', '水蜜桃軟糖', '乳酸飲料', '長效餘韻'],
+                roastLevel: '淺烘焙 Light Roast',
+                score: '94.5'
+            },
+            {
+                id: 'soe-7',
+                type: 'SOE',
+                name: '哥倫比亞惠蘭 水洗',
+                origin: '哥倫比亞 Huila',
+                regionKey: 'Colombia',
+                process: '水洗 Wash',
+                processKey: 'Wash',
+                date: '2026-03-30',
+                weight: 52,
+                variety: '卡杜拉 Caturra',
+                notes: ['綠蘋果', '焦糖甜香', '堅果奶油', '平衡滑順'],
+                roastLevel: '淺中烘焙 Medium Light',
+                score: '88.5'
+            },
+            {
+                id: 'soe-8',
+                type: 'SOE',
+                name: '巴西 莫吉安娜 皇后庄园 黄波旁 NY2 日晒',
+                origin: '巴西 Mogiana',
+                regionKey: 'Brazil',
+                process: '日曬 Natural NY2',
+                processKey: 'Natural',
+                date: '2026-08-02',
+                weight: 90,
+                variety: '黃波旁 Yellow Bourbon',
+                notes: ['烤花生', '黑巧克力', '榛果焦糖', '醇厚低酸'],
+                roastLevel: '中烘焙 Medium Roast',
+                score: '88.0'
+            },
+            {
+                id: 'soe-9',
+                type: 'SOE',
+                name: '雲南錦慶鐵皮卡 水洗',
+                origin: '中國雲南 (Yunnan)',
+                regionKey: 'Yunnan',
+                process: '水洗 Wash',
+                processKey: 'Wash',
+                date: '2026-06-22',
+                weight: 55,
+                variety: '鐵皮卡 Typica',
+                notes: ['草本微香', '黑糖水', '李子酸甜', '乾淨回甘'],
+                roastLevel: '淺中烘焙 Medium Light',
+                score: '89.0'
+            },
+            {
+                id: 'soe-10',
+                type: 'SOE',
+                name: '雲南勐馬鎮 卡蒂姆 日曬',
+                origin: '中國雲南 勐馬鎮',
+                regionKey: 'Yunnan',
+                process: '日曬 Natural',
+                processKey: 'Natural',
+                date: '2026-05-29',
+                weight: 14,
+                variety: '卡蒂姆 Catimor',
+                notes: ['熱帶水果', '發酵酒香', '深色莓果', '甜感濃厚'],
+                roastLevel: '淺中烘焙 Medium Light',
+                score: '88.8'
+            },
+            {
+                id: 'soe-11',
+                type: 'SOE',
+                name: '雲南勐馬鎮 卡蒂姆 日曬 厭氧',
+                origin: '中國雲南 勐馬鎮',
+                regionKey: 'Yunnan',
+                process: '日曬厭氧 Anaerobic Natural',
+                processKey: 'Anaerobic',
+                date: '2026-07-21',
+                weight: 73,
+                variety: '卡蒂姆 Catimor',
+                notes: ['朗姆酒糖', '鳳梨干', '葡萄乾', '層次豐富'],
+                roastLevel: '淺中烘焙 Medium Light',
+                score: '90.5'
+            },
+            {
+                id: 'soe-12',
+                type: 'SOE',
+                name: '雲南孟连「小草莓」卡蒂姆 日晒',
+                origin: '中國雲南 孟連',
+                regionKey: 'Yunnan',
+                process: '特殊日曬 特調小草莓',
+                processKey: 'Natural',
+                date: '2026-08-03',
+                weight: 70,
+                variety: '卡蒂姆 Catimor',
+                notes: ['草莓果醬', '粉紅香檳', '奶油蛋糕', '極致果甜'],
+                roastLevel: '淺烘焙 Light Roast',
+                score: '93.0'
+            },
+            {
+                id: 'soe-13',
+                type: 'SOE',
+                name: '印尼黃金曼特靈 水洗',
+                origin: '印尼 蘇門答臘 (Indonesia)',
+                regionKey: 'Indonesia',
+                process: '濕剝法 / 水洗',
+                processKey: 'Wash',
+                date: '2026-03-31',
+                weight: 235,
+                variety: '曼特靈 Mandheling',
+                notes: ['雪松木香', '草本藥草', '黑巧克力', '極致濃郁'],
+                roastLevel: '中深烘焙 Medium Dark',
+                score: '89.5'
+            },
+
+            // --- 生豆 SOE ---
+            {
+                id: 'green-1',
+                type: 'GREEN',
+                name: '哥倫比亞天堂92 瑰夏 水洗 (生豆)',
+                origin: '哥倫比亞 (Colombia)',
+                regionKey: 'Colombia',
+                process: '水洗 雙重厭氧',
+                processKey: 'Wash',
+                date: '2026 產季',
+                weight: 157,
+                variety: '瑰夏 Gesha',
+                notes: ['生豆規格: G1', '水分 10.5%', '建議淺烘帶出花香'],
+                roastLevel: '生豆 Unroasted',
+                score: 'Green Grade'
+            },
+            {
+                id: 'green-2',
+                type: 'GREEN',
+                name: '巴西 莫吉安娜 皇后庄园 黄波旁 NY2 日晒 (生豆)',
+                origin: '巴西 Mogiana',
+                regionKey: 'Brazil',
+                process: '日曬 NY2',
+                processKey: 'Natural',
+                date: '2026 產季',
+                weight: 178,
+                variety: '黃波旁 Yellow Bourbon',
+                notes: ['生豆規格: NY2', '瑕疵率低', '適合中烘焙特調'],
+                roastLevel: '生豆 Unroasted',
+                score: 'Green Grade'
+            },
+            {
+                id: 'green-3',
+                type: 'GREEN',
+                name: '雲南孟连「小草莓」卡蒂姆 日晒 (生豆)',
+                origin: '中國雲南 孟連',
+                regionKey: 'Yunnan',
+                process: '微批次日曬',
+                processKey: 'Natural',
+                date: '2026 產季',
+                weight: 388,
+                variety: '卡蒂姆 Catimor',
+                notes: ['特選成熟果實', '發酵香氣明顯', '草莓果感底蘊'],
+                roastLevel: '生豆 Unroasted',
+                score: 'Green Grade'
+            },
+            {
+                id: 'green-4',
+                type: 'GREEN',
+                name: '雲南勐馬鎮 卡蒂姆 日曬 (生豆)',
+                origin: '中國雲南 勐馬鎮',
+                regionKey: 'Yunnan',
+                process: '日曬 Natural',
+                processKey: 'Natural',
+                date: '2026 產季',
+                weight: 198,
+                variety: '卡蒂姆 Catimor',
+                notes: ['高海拔原豆', '顆粒飽滿', '水果發酵香'],
+                roastLevel: '生豆 Unroasted',
+                score: 'Green Grade'
+            },
+            {
+                id: 'green-5',
+                type: 'GREEN',
+                name: '雲南勐馬鎮 卡蒂姆 日曬 厭氧 (生豆)',
+                origin: '中國雲南 勐馬鎮',
+                regionKey: 'Yunnan',
+                process: '厭氧日曬 Anaerobic',
+                processKey: 'Anaerobic',
+                date: '2026 產季',
+                weight: 238,
+                variety: '卡蒂姆 Catimor',
+                notes: ['厭氧密閉發酵', '酒香感強烈', '適合淺中焙'],
+                roastLevel: '生豆 Unroasted',
+                score: 'Green Grade'
+            }
+        ];
+
+        // Global State
+        let currentFilter = 'all';
+        let cart = [];
+
+        function renderCoffees() {
+            const soeContainer = document.getElementById('soeGrid');
+            const greenContainer = document.getElementById('greenGrid');
+            const searchVal = document.getElementById('searchInput').value.toLowerCase().trim();
+
+            soeContainer.innerHTML = '';
+            greenContainer.innerHTML = '';
+
+            let soeCount = 0;
+            let greenCount = 0;
+
+            coffeeDatabase.forEach(item => {
+                // Filter Logic
+                const matchesFilter = currentFilter === 'all' || 
+                    (currentFilter === 'SOE' && item.type === 'SOE') ||
+                    (currentFilter === 'GREEN' && item.type === 'GREEN') ||
+                    (currentFilter === 'Ethiopia' && item.regionKey === 'Ethiopia') ||
+                    (currentFilter === 'Colombia' && item.regionKey === 'Colombia') ||
+                    (currentFilter === 'Yunnan' && item.regionKey === 'Yunnan') ||
+                    (currentFilter === 'Gesha' && item.variety.includes('瑰夏'));
+
+                const matchesSearch = item.name.toLowerCase().includes(searchVal) ||
+                    item.origin.toLowerCase().includes(searchVal) ||
+                    item.process.toLowerCase().includes(searchVal) ||
+                    item.notes.some(n => n.toLowerCase().includes(searchVal));
+
+                if (matchesFilter && matchesSearch) {
+                    const cardHtml = createCardElement(item);
+                    if (item.type === 'SOE') {
+                        soeContainer.innerHTML += cardHtml;
+                        soeCount++;
+                    } else {
+                        greenContainer.innerHTML += cardHtml;
+                        greenCount++;
+                    }
+                }
+            });
+
+            document.getElementById('soeCountLabel').innerText = `共 ${soeCount} 款`;
+            document.getElementById('greenCountLabel').innerText = `共 ${greenCount} 款`;
+
+            if (soeCount === 0) {
+                soeContainer.innerHTML = `<div class="col-span-full text-center text-coffee-500 py-8 text-xs">無符合條件的手沖熟豆</div>`;
+            }
+            if (greenCount === 0) {
+                greenContainer.innerHTML = `<div class="col-span-full text-center text-coffee-500 py-8 text-xs">無符合條件的生豆庫存</div>`;
+            }
+        }
+
+        // Card HTML Builder
+        function createCardElement(item) {
+            const isGreen = item.type === 'GREEN';
+            const badgeBg = isGreen ? 'bg-emerald-950/80 text-emerald-400 border-emerald-700/50' : 'bg-amber-950/80 text-amberGlow border-amber-700/50';
+            const stockColor = item.weight < 50 ? 'text-rose-400' : 'text-coffee-300';
+
+            return `
+                <div class="glass-card rounded-2xl p-5 flex flex-col justify-between space-y-4 group">
+                    <div class="space-y-3">
+                        <div class="flex items-start justify-between gap-2">
+                            <span class="px-2.5 py-1 rounded-md border text-[11px] font-mono font-medium ${badgeBg}">
+                                ${item.process}
+                            </span>
+                            <span class="text-xs font-mono ${stockColor} bg-coffee-950/60 px-2 py-0.5 rounded border border-coffee-800">
+                                庫存: <strong class="text-coffee-100">${item.weight}g</strong>
+                            </span>
+                        </div>
+
+                        <div>
+                            <h4 class="font-serif text-lg font-bold text-coffee-100 group-hover:text-amberGlow transition-colors leading-snug">
+                                ${item.name}
+                            </h4>
+                            <p class="text-xs text-coffee-400 mt-1 flex items-center gap-1">
+                                <i class="fa-solid fa-earth-americas text-[10px]"></i> ${item.origin}
+                            </p>
+                        </div>
+
+                        <!-- Flavor Badges -->
+                        <div class="flex flex-wrap gap-1.5 pt-1">
+                            ${item.notes.map(note => `<span class="px-2 py-0.5 rounded bg-coffee-900/80 border border-coffee-800 text-[11px] text-coffee-300">${note}</span>`).join('')}
+                        </div>
+                    </div>
+
+                    <div class="border-t border-coffee-800/80 pt-3 flex items-center justify-between text-xs">
+                        <div class="text-coffee-400 font-mono text-[11px]">
+                            ${isGreen ? '產季' : '烘焙/包裝'}: <span class="text-coffee-200">${item.date}</span>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <button onclick="openModal('${item.id}')" class="px-3 py-1.5 rounded-lg bg-coffee-800 hover:bg-coffee-700 text-coffee-200 transition text-xs flex items-center gap-1">
+                                <i class="fa-solid fa-circle-info"></i> 詳情
+                            </button>
+                            <button onclick="addToCart('${item.id}')" class="px-3 py-1.5 rounded-lg bg-amberGlow/20 hover:bg-amberGlow hover:text-coffee-950 text-amberGlow font-medium border border-amberGlow/40 transition text-xs flex items-center gap-1">
+                                <i class="fa-solid fa-plus"></i> 預訂
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function setFilter(filterKey) {
+            currentFilter = filterKey;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if (btn.dataset.filter === filterKey) {
+                    btn.classList.add('bg-amberGlow', 'text-coffee-950', 'border-amberGlow', 'font-semibold');
+                    btn.classList.remove('bg-coffee-900/60', 'text-coffee-200', 'border-coffee-700');
+                } else {
+                    btn.classList.remove('bg-amberGlow', 'text-coffee-950', 'border-amberGlow', 'font-semibold');
+                    btn.classList.add('bg-coffee-900/60', 'text-coffee-200', 'border-coffee-700');
+                }
+            });
+            renderCoffees();
+        }
+
+        function filterCoffees() {
+            renderCoffees();
+        }
+
+        function openModal(id) {
+            const item = coffeeDatabase.find(c => c.id === id);
+            if (!item) return;
+
+            const modalBody = document.getElementById('modalBody');
+            modalBody.innerHTML = `
+                <div class="space-y-4">
+                    <div class="inline-block px-3 py-1 rounded-full text-xs font-mono bg-amberGlow/20 text-amberGlow border border-amberGlow/30">
+                        ${item.type === 'SOE' ? '精品手沖熟豆' : '原產地生豆'}
+                    </div>
+
+                    <h3 class="font-serif text-2xl font-bold text-coffee-100">${item.name}</h3>
+
+                    <div class="grid grid-cols-2 gap-3 text-xs bg-coffee-950/70 p-4 rounded-xl border border-coffee-800">
+                        <div><span class="text-coffee-400">產區：</span> <span class="text-coffee-100 font-medium">${item.origin}</span></div>
+                        <div><span class="text-coffee-400">處理法：</span> <span class="text-coffee-100 font-medium">${item.process}</span></div>
+                        <div><span class="text-coffee-400">品種：</span> <span class="text-coffee-100 font-medium">${item.variety}</span></div>
+                        <div><span class="text-coffee-400">烘焙度：</span> <span class="text-coffee-100 font-medium">${item.roastLevel}</span></div>
+                        <div><span class="text-coffee-400">日期/產季：</span> <span class="text-coffee-100 font-mono">${item.date}</span></div>
+                        <div><span class="text-coffee-400">目前庫存：</span> <span class="text-amberGlow font-mono font-bold">${item.weight} g</span></div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <h5 class="text-xs font-bold text-coffee-300 uppercase tracking-wider">風味特徵描述</h5>
+                        <div class="flex flex-wrap gap-2">
+                            ${item.notes.map(n => `<span class="px-2.5 py-1 rounded-lg bg-coffee-800 text-amberGlow text-xs border border-coffee-700">${n}</span>`).join('')}
+                        </div>
+                    </div>
+
+                    ${item.type === 'SOE' ? `
+                    <div class="bg-coffee-900/60 p-4 rounded-xl border border-coffee-800 space-y-2 text-xs">
+                        <div class="font-bold text-amberGlow flex items-center gap-1">
+                            <i class="fa-solid fa-vial"></i> Billy's 建議沖煮參數
+                        </div>
+                        <ul class="list-disc list-inside text-coffee-300 space-y-1">
+                            <li>粉水比: 1:15 (15g 粉 對 225ml 水)</li>
+                            <li>研磨度: EK43s 8.5 (中等偏細，約白砂糖大小)</li>
+                            <li>水溫: ${item.process.includes('水洗') ? '92°C 高溫帶出極致花香' : '90°C 溫和萃取醇厚果甜'}</li>
+                        </ul>
+                    </div>
+                    ` : ''}
+
+                    <div class="pt-2 flex gap-3">
+                        <button onclick="addToCart('${item.id}'); closeModal();" class="flex-1 py-2.5 rounded-xl bg-amberGlow text-coffee-950 font-bold hover:bg-amber-300 transition text-sm">
+                            加入預訂單
+                        </button>
+                        <button onclick="closeModal()" class="px-5 py-2.5 rounded-xl bg-coffee-800 text-coffee-300 hover:bg-coffee-700 transition text-sm">
+                            關閉
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            const modal = document.getElementById('detailModal');
+            const card = document.getElementById('modalCard');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            card.classList.remove('scale-95');
+            card.classList.add('scale-100');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('detailModal');
+            const card = document.getElementById('modalCard');
+            card.classList.remove('scale-100');
+            card.classList.add('scale-95');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        function addToCart(id) {
+            const item = coffeeDatabase.find(c => c.id === id);
+            if (!item) return;
+
+            const existing = cart.find(i => i.id === id);
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                cart.push({ ...item, qty: 1, reservedGrams: 50 }); // Default 50g per order
+            }
+
+            updateCartUI();
+            
+            // Notification toast
+            showToast(`已新增 ${item.name} 至預訂單`);
+        }
+
+        function updateCartUI() {
+            const badge = document.getElementById('cartCountBadge');
+            const list = document.getElementById('cartItemsList');
+            const totalWeightLabel = document.getElementById('cartTotalWeight');
+
+            const totalItems = cart.reduce((acc, curr) => acc + curr.qty, 0);
+            badge.innerText = totalItems;
+
+            if (totalItems > 0) {
+                badge.classList.remove('opacity-0', 'scale-75');
+            } else {
+                badge.classList.add('opacity-0', 'scale-75');
+            }
+
+            if (cart.length === 0) {
+                list.innerHTML = `<p class="text-center text-xs text-coffee-500 py-10">預訂清單目前是空的</p>`;
+                totalWeightLabel.innerText = '0 g';
+                return;
+            }
+
+            let totalGrams = 0;
+            list.innerHTML = cart.map((item, index) => {
+                const itemTotalGrams = item.reservedGrams * item.qty;
+                totalGrams += itemTotalGrams;
+
+                return `
+                    <div class="p-3 rounded-xl bg-coffee-900/80 border border-coffee-800 flex items-center justify-between text-xs">
+                        <div class="space-y-1 max-w-[200px]">
+                            <div class="font-bold text-coffee-100 truncate">${item.name}</div>
+                            <div class="text-coffee-400 font-mono">${item.type === 'SOE' ? '熟豆' : '生豆'} · 每份 ${item.reservedGrams}g</div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="flex items-center gap-1.5 bg-coffee-950 px-2 py-1 rounded border border-coffee-800 font-mono">
+                                <button onclick="changeQty(${index}, -1)" class="text-amberGlow hover:text-white font-bold px-1">-</button>
+                                <span class="text-coffee-200">${item.qty}</span>
+                                <button onclick="changeQty(${index}, 1)" class="text-amberGlow hover:text-white font-bold px-1">+</button>
+                            </div>
+                            <button onclick="removeFromCart(${index})" class="text-rose-400 hover:text-rose-300">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            totalWeightLabel.innerText = `${totalGrams} g`;
+        }
+
+        function changeQty(index, delta) {
+            cart[index].qty += delta;
+            if (cart[index].qty <= 0) {
+                cart.splice(index, 1);
+            }
+            updateCartUI();
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function toggleCartDrawer() {
+            const drawer = document.getElementById('cartDrawer');
+            drawer.classList.toggle('translate-x-full');
+        }
+
+        function sendReservation() {
+            if (cart.length === 0) {
+                showToast('預訂單為空！');
+                return;
+            }
+
+            let summary = `【Billy's Coffee 豆單預訂需求】\n`;
+            cart.forEach(item => {
+                summary += `- ${item.name} x ${item.qty} 份 (${item.reservedGrams * item.qty}g)\n`;
+            });
+
+            // Copy to clipboard
+            const dummy = document.createElement('textarea');
+            document.body.appendChild(dummy);
+            dummy.value = summary;
+            dummy.select();
+            document.execCommand('copy');
+            document.body.removeChild(dummy);
+
+            showToast('已複製預訂清單至剪貼簿！');
+        }
+
+        function showToast(msg) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-6 right-6 z-50 bg-amberGlow text-coffee-950 font-bold px-4 py-2.5 rounded-xl shadow-2xl text-xs transition-all duration-300 transform translate-y-4 opacity-0';
+            toast.innerText = msg;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-4', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-4', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 2500);
+        }
+
+        let dose = 15;
+        let timerInterval = null;
+        let timerSeconds = 0;
+        let isTimerRunning = false;
+
+        function adjustDose(delta) {
+            dose = Math.max(10, Math.min(30, dose + delta));
+            document.getElementById('doseWeight').innerText = dose;
+            document.getElementById('targetWater').innerText = `${dose * 15} ml`;
+        }
+
+        function toggleTimer() {
+            if (isTimerRunning) {
+                pauseTimer();
+            } else {
+                startTimer();
+            }
+        }
+
+        function startTimer() {
+            isTimerRunning = true;
+            document.getElementById('startBtnText').innerText = '暫停';
+            document.getElementById('playIcon').className = 'fa-solid fa-pause';
+
+            timerInterval = setInterval(() => {
+                timerSeconds++;
+                updateTimerDisplay();
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            isTimerRunning = false;
+            clearInterval(timerInterval);
+            document.getElementById('startBtnText').innerText = '繼續';
+            document.getElementById('playIcon').className = 'fa-solid fa-play';
+        }
+
+        function resetTimer() {
+            pauseTimer();
+            timerSeconds = 0;
+            document.getElementById('startBtnText').innerText = '開始沖煮';
+            updateTimerDisplay();
+        }
+
+        function updateTimerDisplay() {
+            const mins = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+            const secs = String(timerSeconds % 60).padStart(2, '0');
+            document.getElementById('timerDisplay').innerText = `${mins}:${secs}`;
+
+            // Brew Step guidance
+            const stepText = document.getElementById('brewStepText');
+            const totalTarget = dose * 15;
+
+            if (timerSeconds === 0) {
+                stepText.innerText = '點擊開始進行手沖程序';
+            } else if (timerSeconds <= 30) {
+                stepText.innerText = `[段落 1] 第一次注水悶蒸 (${dose * 2} ml)，讓咖啡粉均勻排氣`;
+            } else if (timerSeconds <= 70) {
+                stepText.innerText = `[段落 2] 第二次注水至 ${Math.round(totalTarget * 0.4)} ml，帶出酸甜風味層次`;
+            } else if (timerSeconds <= 120) {
+                stepText.innerText = `[段落 3] 第三次注水至 ${Math.round(totalTarget * 0.7)} ml，注入核心醇厚度`;
+            } else if (timerSeconds <= 160) {
+                stepText.innerText = `[段落 4] 最終注水至總量 ${totalTarget} ml，等待濾滴完成`;
+            } else {
+                stepText.innerText = '沖煮完成！請享用完美手沖咖啡。';
+            }
+        }
+
+        let audioCtx = null;
+        let isAudioPlaying = false;
+        let noiseNode = null;
+        let gainNode = null;
+
+        function toggleAmbientSound() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+
+            if (isAudioPlaying) {
+                stopAmbientSound();
+            } else {
+                startAmbientSound();
+            }
+        }
+
+        function startAmbientSound() {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            // Create soothing brown noise (rain/soft coffee ambient sound simulation)
+            const bufferSize = audioCtx.sampleRate * 2;
+            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const output = buffer.getChannelData(0);
+            let lastOut = 0.0;
+
+            for (let i = 0; i < bufferSize; i++) {
+                const white = Math.random() * 2 - 1;
+                output[i] = (lastOut + (0.02 * white)) / 1.02; // Brown noise formula
+                lastOut = output[i];
+                output[i] *= 3.5; // Gain adjustment
+            }
+
+            noiseNode = audioCtx.createBufferSource();
+            noiseNode.buffer = buffer;
+            noiseNode.loop = true;
+
+            // Lowpass filter to simulate gentle rain / cozy indoor ambient
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(400, audioCtx.currentTime);
+
+            gainNode = audioCtx.createGain();
+            gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime); // Soft volume
+
+            noiseNode.connect(filter);
+            filter.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            noiseNode.start();
+            isAudioPlaying = true;
+
+            document.getElementById('audioStatusText').innerText = '環境音效 : 舒緩雨聲';
+            document.getElementById('audioDot').className = 'relative inline-flex rounded-full h-2 w-2 bg-emerald-400';
+            document.getElementById('audioPing').className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75';
+        }
+
+        function stopAmbientSound() {
+            if (noiseNode) {
+                noiseNode.stop();
+                noiseNode.disconnect();
+            }
+            isAudioPlaying = false;
+
+            document.getElementById('audioStatusText').innerText = '環境音效 : 關閉';
+            document.getElementById('audioDot').className = 'relative inline-flex rounded-full h-2 w-2 bg-coffee-500';
+            document.getElementById('audioPing').className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-0';
+        }
+
+        function initSteamCanvas() {
+            const canvas = document.getElementById('steamCanvas');
+            const ctx = canvas.getContext('2d');
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            const particles = Array.from({ length: 45 }, () => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 3 + 1,
+                opacity: Math.random() * 0.4 + 0.1,
+                speedY: Math.random() * 0.4 + 0.1,
+                speedX: Math.random() * 0.2 - 0.1,
+            }));
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                particles.forEach(p => {
+                    p.y -= p.speedY;
+                    p.x += p.speedX;
+
+                    if (p.y < 0) {
+                        p.y = canvas.height + 10;
+                        p.x = Math.random() * canvas.width;
+                    }
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(224, 169, 109, ${p.opacity})`;
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = 'rgba(224, 169, 109, 0.3)';
+                    ctx.fill();
+                });
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+        }
+
+        window.onload = function() {
+            renderCoffees();
+            initSteamCanvas();
+        };
+    </script>
+</body>
+</html>

@@ -1,412 +1,424 @@
 <!DOCTYPE html>
-<html lang="zh-TW" class="scroll-smooth">
+<html lang="zh-Hant" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Billy's Coffee - 手沖精品咖啡與豆單</title>
-    
-    <!-- Tailwind CSS CDN -->
+    <title>Billy's Coffee - 精品手沖咖啡與烘焙所</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Font Awesome Icons -->
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <!-- Google Fonts: Inter & Noto Serif TC -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
-
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
                         coffee: {
-                            50: '#FDFBF7',
-                            100: '#F7F2EA',
-                            200: '#E8DCB8',
-                            300: '#D7C297',
-                            400: '#C2A16B',
-                            500: '#9E7441',
-                            600: '#7E562A',
-                            700: '#5F3D1C',
-                            800: '#3D2510',
-                            900: '#231408',
-                            950: '#130A03',
+                            950: '#0c0a09',
+                            900: '#17120e',
+                            800: '#261c14',
+                            700: '#3d2c20',
+                            400: '#a89078',
+                            300: '#d1c2b4',
+                            100: '#f5f2ed',
                         },
-                        amberGlow: '#E5A93C',
-                        roastGreen: '#2D5A42',
+                        amberGlow: '#d97706',
                     },
                     fontFamily: {
-                        serif: ['"Noto Serif TC"', 'serif'],
                         sans: ['Inter', 'sans-serif'],
-                    },
-                    backgroundImage: {
-                        'hero-pattern': "linear-gradient(to bottom, rgba(19, 10, 3, 0.75), rgba(19, 10, 3, 0.92)), url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1920&q=80')",
+                        serif: ['Noto Serif TC', 'serif'],
                     }
                 }
             }
         }
     </script>
-
     <style>
+        body {
+            font-family: 'Inter', 'Noto Serif TC', sans-serif;
+            background-color: #0c0a09;
+            color: #f5f2ed;
+            overflow-x: hidden;
+        }
+        .glass-panel {
+            background: rgba(23, 18, 14, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(217, 119, 6, 0.15);
+        }
+        .card-img-zoom {
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .glass-panel:hover .card-img-zoom {
+            transform: scale(1.05);
+        }
+        /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #130A03;
+            background: #0c0a09;
         }
         ::-webkit-scrollbar-thumb {
-            background: #5F3D1C;
+            background: #3d2c20;
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #9E7441;
-        }
-
-        .glass-panel {
-            background: rgba(35, 20, 8, 0.82);
-            backdrop-filter: blur(14px);
-            border: 1px solid rgba(232, 220, 184, 0.12);
-        }
-
-        .amber-glow-text {
-            text-shadow: 0 0 20px rgba(229, 169, 60, 0.4);
-        }
-
-        .card-img-zoom {
-            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .group:hover .card-img-zoom {
-            transform: scale(1.08);
-        }
-
-        @keyframes brewPulse {
-            0%, 100% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.04); opacity: 1; }
-        }
-        .brew-active {
-            animation: brewPulse 2s infinite ease-in-out;
+            background: #d97706;
         }
     </style>
 </head>
-<body class="bg-coffee-950 text-coffee-100 font-sans selection:bg-coffee-500 selection:text-white min-h-screen flex flex-col justify-between">
+<body class="bg-coffee-950 text-coffee-100 min-h-screen flex flex-col selection:bg-amber-600 selection:text-white">
 
-    <header class="sticky top-0 z-40 glass-panel border-b border-coffee-800/60 transition-all duration-300 shadow-2xl">
+    <!-- Navigation Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 glass-panel border-b border-coffee-800/80">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <!-- Brand Logo -->
-            <div class="flex items-center gap-3 cursor-pointer group" onclick="scrollToSection('hero')">
-                <div class="w-11 h-11 rounded-full bg-gradient-to-br from-amberGlow to-coffee-700 flex items-center justify-center shadow-lg shadow-amberGlow/10 border border-amberGlow/30 group-hover:scale-105 transition">
-                    <i class="fa-solid fa-mug-hot text-coffee-950 text-lg"></i>
+            <div class="flex items-center gap-3 cursor-pointer" onclick="scrollToSection('hero')">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-amber-600 to-amber-400 flex items-center justify-center text-coffee-950 font-bold text-lg shadow-lg shadow-amber-900/40">
+                    <i class="fa-solid fa-mug-hot"></i>
                 </div>
                 <div>
-                    <h1 class="font-serif text-xl sm:text-2xl font-bold tracking-wider text-amberGlow">Billy's Coffee</h1>
-                    <p class="text-[10px] tracking-widest text-coffee-300 uppercase">Specialty Hand-Drip Bar</p>
+                    <h1 class="font-serif font-bold text-lg sm:text-xl tracking-wide text-coffee-100">Billy's Coffee</h1>
+                    <p class="text-[10px] text-amberGlow tracking-widest uppercase font-mono">Specialty Coffee & Roastery</p>
                 </div>
             </div>
 
-            <!-- Navigation Links & Ambient Music Button -->
-            <div class="flex items-center gap-3 sm:gap-6">
-                <!-- Audio Relaxation Control -->
-                <button id="ambientAudioBtn" onclick="toggleAmbientSound()" class="flex items-center gap-2 px-3.5 py-2 rounded-full bg-coffee-900/90 hover:bg-coffee-800 border border-coffee-700/60 text-xs text-coffee-200 transition-all shadow-inner group">
+            <!-- Desktop Menu Links -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-coffee-300">
+                <button onclick="scrollToSection('roasted')" class="hover:text-amberGlow transition">精品熟豆 SOE</button>
+                <button onclick="scrollToSection('green')" class="hover:text-amberGlow transition">生豆專區</button>
+                <button onclick="scrollToSection('calculator')" class="hover:text-amberGlow transition">手沖計時器</button>
+                <button onclick="scrollToSection('about')" class="hover:text-amberGlow transition">烘焙理念</button>
+            </nav>
+
+            <!-- Actions -->
+            <div class="flex items-center gap-3">
+                <!-- Music Player Toggle -->
+                <button onclick="toggleAmbientSound()" id="audioToggleBtn" class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-coffee-900 border border-coffee-700/80 hover:border-amberGlow/60 text-xs transition shadow-sm">
                     <span class="relative flex h-2.5 w-2.5">
-                      <span id="audioPing" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-0"></span>
+                      <span id="audioPing" class="absolute inline-flex h-full w-full rounded-full bg-coffee-400 opacity-0"></span>
                       <span id="audioDot" class="relative inline-flex rounded-full h-2.5 w-2.5 bg-coffee-500"></span>
                     </span>
-                    <i class="fa-solid fa-music text-amberGlow/80 group-hover:text-amberGlow transition"></i>
-                    <span id="audioStatusText" class="hidden sm:inline font-medium">慢調爵士音樂 : 關閉</span>
+                    <i class="fa-solid fa-music text-amberGlow"></i>
+                    <span id="audioStatusText" class="hidden sm:inline font-mono text-[11px] text-coffee-300">慢調爵士音樂</span>
                 </button>
-
-                <!-- Navigation Items -->
-                <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-coffee-200">
-                    <button onclick="scrollToSection('roasted-menu')" class="hover:text-amberGlow transition flex items-center gap-1.5"><i class="fa-solid fa-fire text-xs text-amberGlow/70"></i> 手沖豆單 (SOE)</button>
-                    <button onclick="scrollToSection('green-beans')" class="hover:text-amberGlow transition flex items-center gap-1.5"><i class="fa-solid fa-leaf text-xs text-emerald-400/80"></i> 生豆專區</button>
-                    <button onclick="scrollToSection('timer-section')" class="hover:text-amberGlow transition flex items-center gap-1.5"><i class="fa-solid fa-stopwatch text-xs text-amberGlow/70"></i> 沖煮助手</button>
-                </nav>
 
                 <!-- Reservation Cart Button -->
-                <button onclick="toggleReservationDrawer()" class="relative p-2.5 rounded-xl bg-coffee-800/80 hover:bg-coffee-700 border border-coffee-600/40 text-coffee-200 transition shadow">
-                    <i class="fa-solid fa-bag-shopping text-base"></i>
-                    <span id="cartBadge" class="absolute -top-1.5 -right-1.5 bg-amberGlow text-coffee-950 font-bold text-[10px] w-5 h-5 rounded-full flex items-center justify-center opacity-0 transition-opacity shadow-md">0</span>
+                <button onclick="openReservationDrawer()" class="relative p-2.5 rounded-xl bg-coffee-900 hover:bg-coffee-800 border border-coffee-700/80 text-amberGlow transition flex items-center gap-2">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span id="cartBadge" class="absolute -top-1.5 -right-1.5 bg-amberGlow text-coffee-950 font-bold text-[10px] w-5 h-5 rounded-full flex items-center justify-center shadow-md hidden">0</span>
+                    <span class="hidden lg:inline text-xs font-semibold text-coffee-200">預留清單</span>
+                </button>
+
+                <!-- Mobile Menu Button -->
+                <button onclick="toggleMobileMenu()" class="md:hidden p-2.5 rounded-xl bg-coffee-900 text-coffee-300 hover:text-amberGlow">
+                    <i class="fa-solid fa-bars text-lg"></i>
                 </button>
             </div>
+        </div>
+
+        <!-- Mobile Drawer -->
+        <div id="mobileMenu" class="hidden md:hidden glass-panel border-t border-coffee-800 px-6 py-5 space-y-4">
+            <button onclick="scrollToSection('roasted'); toggleMobileMenu();" class="block w-full text-left font-medium text-coffee-200 hover:text-amberGlow py-1">精品熟豆 SOE</button>
+            <button onclick="scrollToSection('green'); toggleMobileMenu();" class="block w-full text-left font-medium text-coffee-200 hover:text-amberGlow py-1">生豆專區</button>
+            <button onclick="scrollToSection('calculator'); toggleMobileMenu();" class="block w-full text-left font-medium text-coffee-200 hover:text-amberGlow py-1">手沖計時器</button>
+            <button onclick="scrollToSection('about'); toggleMobileMenu();" class="block w-full text-left font-medium text-coffee-200 hover:text-amberGlow py-1">烘焙理念</button>
         </div>
     </header>
 
-    <section id="hero" class="relative bg-hero-pattern bg-cover bg-center py-20 lg:py-28 px-4 sm:px-6 lg:px-8 border-b border-coffee-800/80">
-        <div class="max-w-4xl mx-auto text-center space-y-6">
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amberGlow/10 border border-amberGlow/30 text-amberGlow text-xs font-semibold tracking-wider uppercase">
-                <i class="fa-solid fa-fire-flame-curved text-xs"></i> 嚴選單一產區 SOE 精品手沖
+    <!-- Hero Section -->
+    <section id="hero" class="relative pt-32 pb-20 md:pt-44 md:pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center flex flex-col items-center justify-center">
+        <div class="absolute inset-0 -z-10 flex items-center justify-center opacity-25 pointer-events-none">
+            <div class="w-[500px] h-[500px] bg-amber-600/20 rounded-full blur-[120px]"></div>
+        </div>
+
+        <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-coffee-900/90 border border-amberGlow/30 text-amberGlow text-xs font-semibold tracking-wide mb-6 shadow-inner">
+            <i class="fa-solid fa-certificate"></i> Artisanal Coffee Roaster & Direct Trade SOE
+        </span>
+
+        <h2 class="font-serif text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-coffee-50 max-w-4xl leading-tight">
+            每一豆，皆是風味的極致探索
+        </h2>
+
+        <p class="mt-6 text-base sm:text-lg text-coffee-300 max-w-2xl font-light leading-relaxed">
+            嚴選世界頂級莊園微批次精品咖啡豆。從生豆嚴格篩選、精準淺中焙，到 4:6 黃金手沖曲線，為您呈獻乾淨、透亮、層次分明的風土記憶。
+        </p>
+
+        <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
+            <button onclick="scrollToSection('roasted')" class="px-8 py-3.5 rounded-2xl bg-amberGlow hover:bg-amber-600 text-coffee-950 font-bold text-sm transition shadow-xl shadow-amber-950/50 flex items-center gap-2">
+                <i class="fa-solid fa-mug-saucer"></i> 探索精品熟豆
+            </button>
+            <button onclick="scrollToSection('calculator')" class="px-8 py-3.5 rounded-2xl bg-coffee-900 hover:bg-coffee-800 text-coffee-200 border border-coffee-700 font-semibold text-sm transition flex items-center gap-2">
+                <i class="fa-solid fa-stopwatch"></i> 開啟沖煮計時器
+            </button>
+        </div>
+    </section>
+
+    <!-- Roasted SOE Beans Section -->
+    <section id="roasted" class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4 border-b border-coffee-800 pb-6">
+            <div>
+                <span class="text-amberGlow text-xs font-mono uppercase tracking-widest block mb-1">Single Origin Espresso & Pour-Over</span>
+                <h3 class="font-serif text-2xl sm:text-3xl font-bold text-coffee-50">精品手沖 SOE 熟豆清單</h3>
             </div>
             
-            <h2 class="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold text-coffee-50 tracking-tight leading-tight amber-glow-text">
-                探索每一滴手沖的風土韻味
-            </h2>
-            
-            <p class="text-coffee-300 text-sm sm:text-base max-w-2xl mx-auto font-light leading-relaxed">
-                歡迎來到 Billy's Coffee。在此細品來自埃塞俄比亞、哥倫比亞、巴西、雲南與印尼的特選單品豆，感受沉靜優雅的靜謐氛圍與極致風味。
-            </p>
+            <!-- Filters & Search -->
+            <div class="flex flex-wrap items-center gap-3">
+                <div class="relative">
+                    <input type="text" id="searchInput" placeholder="搜尋豆款、產地或風味..." oninput="handleSearch(this.value)" class="bg-coffee-900/90 border border-coffee-700 text-coffee-100 text-xs rounded-xl px-4 py-2 pl-9 focus:outline-none focus:border-amberGlow w-56 sm:w-64 placeholder-coffee-400">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-coffee-400 text-xs"></i>
+                </div>
 
-            <!-- Quick Search Bar -->
-            <div class="pt-4 max-w-xl mx-auto">
-                <div class="relative flex items-center">
-                    <i class="fa-solid fa-magnifying-glass absolute left-4 text-coffee-400"></i>
-                    <input type="text" id="searchInput" oninput="filterBeans()" placeholder="搜尋產區、處理法或風味（例如：瑰夏、水洗、日曬、草莓）..." 
-                           class="w-full bg-coffee-900/90 text-coffee-100 placeholder-coffee-400 text-sm rounded-xl pl-11 pr-10 py-3.5 border border-coffee-700/80 focus:outline-none focus:border-amberGlow transition shadow-2xl">
-                    <button onclick="clearSearch()" id="clearSearchBtn" class="absolute right-3 text-coffee-400 hover:text-coffee-200 text-sm hidden">
-                        <i class="fa-solid fa-circle-xmark"></i>
-                    </button>
+                <div class="flex items-center bg-coffee-900/90 border border-coffee-700 rounded-xl p-1 text-xs">
+                    <button onclick="filterRegion('ALL')" class="region-btn px-3 py-1.5 rounded-lg font-medium transition bg-amberGlow text-coffee-950" data-region="ALL">全部</button>
+                    <button onclick="filterRegion('Ethiopia')" class="region-btn px-3 py-1.5 rounded-lg font-medium transition text-coffee-300 hover:text-white" data-region="Ethiopia">埃塞俄比亞</button>
+                    <button onclick="filterRegion('Colombia')" class="region-btn px-3 py-1.5 rounded-lg font-medium transition text-coffee-300 hover:text-white" data-region="Colombia">哥倫比亞</button>
+                    <button onclick="filterRegion('Brazil')" class="region-btn px-3 py-1.5 rounded-lg font-medium transition text-coffee-300 hover:text-white" data-region="Brazil">巴西</button>
+                    <button onclick="filterRegion('Yunnan')" class="region-btn px-3 py-1.5 rounded-lg font-medium transition text-coffee-300 hover:text-white" data-region="Yunnan">雲南</button>
+                    <button onclick="filterRegion('Indonesia')" class="region-btn px-3 py-1.5 rounded-lg font-medium transition text-coffee-300 hover:text-white" data-region="Indonesia">印尼</button>
                 </div>
             </div>
         </div>
 
-        <div class="max-w-6xl mx-auto mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div class="relative h-28 rounded-xl overflow-hidden border border-coffee-800/80 group">
-                <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80" alt="Pour Over Brew" class="w-full h-full object-cover card-img-zoom" onerror="handleImageError(this)">
-                <div class="absolute inset-0 bg-gradient-to-t from-coffee-950 via-coffee-950/40 to-transparent p-3 flex flex-col justify-end">
-                    <span class="text-xs font-serif font-bold text-coffee-100">匠心手沖萃取</span>
-                    <span class="text-[10px] text-amberGlow">V60 精緻注水</span>
-                </div>
+        <!-- Roasted Beans Grid -->
+        <div id="roastedBeansGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Dynamically populated via JS -->
+        </div>
+    </section>
+
+    <!-- Green Beans Section -->
+    <section id="green" class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+        <div class="mb-10 border-b border-coffee-800 pb-6 flex items-center justify-between">
+            <div>
+                <span class="text-emerald-400 text-xs font-mono uppercase tracking-widest block mb-1">Raw Green Coffee Inventory</span>
+                <h3 class="font-serif text-2xl sm:text-3xl font-bold text-coffee-50">生豆專區 (Green Beans)</h3>
             </div>
-            <div class="relative h-28 rounded-xl overflow-hidden border border-coffee-800/80 group">
-                <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=600&q=80" alt="Roasted Coffee Beans" class="w-full h-full object-cover card-img-zoom" onerror="handleImageError(this)">
-                <div class="absolute inset-0 bg-gradient-to-t from-coffee-950 via-coffee-950/40 to-transparent p-3 flex flex-col justify-end">
-                    <span class="text-xs font-serif font-bold text-coffee-100">極致微批次</span>
-                    <span class="text-[10px] text-amberGlow">新鮮烘焙熟豆</span>
-                </div>
+            <span class="bg-emerald-950/80 text-emerald-400 border border-emerald-800/60 text-xs font-mono px-3 py-1 rounded-full">
+                <i class="fa-solid fa-wind mr-1.5"></i> 附家用浮風逆風式烘焙建議
+            </span>
+        </div>
+
+        <div id="greenBeansGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Dynamically populated via JS -->
+        </div>
+    </section>
+
+    <!-- Interactive Pour-Over Calculator & 4:6 Timer Section -->
+    <section id="calculator" class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+        <div class="glass-panel rounded-3xl p-6 sm:p-10 border border-amberGlow/30 relative overflow-hidden shadow-2xl">
+            <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-amber-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="max-w-3xl mx-auto text-center mb-10">
+                <span class="text-amberGlow text-xs font-mono uppercase tracking-widest block mb-2">Brew Master Assistant</span>
+                <h3 class="font-serif text-2xl sm:text-4xl font-bold text-coffee-50">黃金 4:6 手沖計時與水量計算器</h3>
+                <p class="text-xs sm:text-sm text-coffee-300 mt-2 font-light">
+                    依據 Tetsu Kasuya 經典 4:6 萃取法，精準掌握前段酸甜平衡與後段濃度調整，讓您在家也能完美沖煮每一杯 SOE。
+                </p>
             </div>
-            <div class="relative h-28 rounded-xl overflow-hidden border border-coffee-800/80 group">
-                <img src="https://images.unsplash.com/photo-1587734195503-904fca47e0e9?auto=format&fit=crop&w=600&q=80" alt="Green Coffee Beans" class="w-full h-full object-cover card-img-zoom" onerror="handleImageError(this)">
-                <div class="absolute inset-0 bg-gradient-to-t from-coffee-950 via-coffee-950/40 to-transparent p-3 flex flex-col justify-end">
-                    <span class="text-xs font-serif font-bold text-coffee-100">嚴選原產地生豆</span>
-                    <span class="text-[10px] text-emerald-400">新鮮原袋保存</span>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+                <!-- Calculator Inputs -->
+                <div class="space-y-5 bg-coffee-900/90 p-6 rounded-2xl border border-coffee-800">
+                    <h4 class="font-serif font-bold text-base text-coffee-100 flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-amberGlow"></i> 沖煮參數設定
+                    </h4>
+
+                    <div>
+                        <label class="block text-xs text-coffee-300 mb-1.5 font-medium">咖啡豆克數 (g)</label>
+                        <input type="number" id="coffeeGrams" value="20" min="10" max="50" oninput="updateCalculator()" class="w-full bg-coffee-950 border border-coffee-700 rounded-xl px-4 py-2.5 text-coffee-100 font-mono text-sm focus:outline-none focus:border-amberGlow">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs text-coffee-300 mb-1.5 font-medium">粉水比 (1 : <span id="ratioDisplay">15</span>)</label>
+                        <input type="range" id="ratioSlider" min="13" max="18" value="15" step="0.5" oninput="updateCalculator()" class="w-full accent-amberGlow cursor-pointer">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs text-coffee-300 mb-1.5 font-medium">口感偏好 (前 40% 水量調控)</label>
+                        <select id="tastePreference" onchange="updateCalculator()" class="w-full bg-coffee-950 border border-coffee-700 rounded-xl px-4 py-2.5 text-coffee-100 text-xs font-medium focus:outline-none focus:border-amberGlow">
+                            <option value="balanced">均衡標準 (兩段均分: 40g + 40g)</option>
+                            <option value="sweet">甜感加強 (第一段少: 30g + 50g)</option>
+                            <option value="acidic">明亮果酸 (第一段多: 50g + 30g)</option>
+                        </select>
+                    </div>
+
+                    <div class="pt-4 border-t border-coffee-800 flex justify-between items-center text-sm">
+                        <span class="text-coffee-300">總注水量:</span>
+                        <span id="totalWater" class="font-mono font-bold text-amberGlow text-lg">300 g</span>
+                    </div>
                 </div>
-            </div>
-            <div class="relative h-28 rounded-xl overflow-hidden border border-coffee-800/80 group">
-                <img src="https://images.unsplash.com/photo-1497515114629-f71d768fd07c?auto=format&fit=crop&w=600&q=80" alt="Specialty Coffee Bar" class="w-full h-full object-cover card-img-zoom" onerror="handleImageError(this)">
-                <div class="absolute inset-0 bg-gradient-to-t from-coffee-950 via-coffee-950/40 to-transparent p-3 flex flex-col justify-end">
-                    <span class="text-xs font-serif font-bold text-coffee-100">寧靜吧檯體驗</span>
-                    <span class="text-[10px] text-amberGlow">輕音樂氛圍</span>
+
+                <!-- Timer & Step Guidance Display -->
+                <div class="lg:col-span-2 bg-coffee-900/90 p-6 sm:p-8 rounded-2xl border border-coffee-800 flex flex-col justify-between space-y-6">
+                    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-coffee-800 pb-5">
+                        <div class="text-center sm:text-left">
+                            <span class="text-xs text-coffee-400 block font-mono">目前計時</span>
+                            <div id="timerDisplay" class="font-mono text-4xl sm:text-5xl font-bold text-amberGlow tracking-wider mt-1">00:00</div>
+                        </div>
+
+                        <div class="flex items-center gap-3">
+                            <button onclick="startTimer()" id="startBtn" class="px-6 py-3 rounded-xl bg-amberGlow hover:bg-amber-600 text-coffee-950 font-bold text-xs transition shadow-lg flex items-center gap-2">
+                                <i class="fa-solid fa-play"></i> 開始計時
+                            </button>
+                            <button onclick="pauseTimer()" class="px-5 py-3 rounded-xl bg-coffee-800 hover:bg-coffee-700 text-coffee-200 font-semibold text-xs transition">
+                                <i class="fa-solid fa-pause"></i> 暫停
+                            </button>
+                            <button onclick="resetTimer()" class="px-5 py-3 rounded-xl bg-coffee-800 hover:bg-coffee-700 text-coffee-200 font-semibold text-xs transition">
+                                <i class="fa-solid fa-rotate-right"></i> 重設
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step breakdown list -->
+                    <div class="space-y-3">
+                        <h5 class="text-xs font-mono uppercase tracking-wider text-coffee-400">4:6 階段注水指南</h5>
+                        <div id="pourStepsList" class="space-y-2.5 max-h-56 overflow-y-auto pr-1">
+                            <!-- Populated via JS -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16 flex-grow">
-        
-        <section id="roasted-menu" class="space-y-8">
-            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-coffee-800/80 pb-6">
-                <div>
-                    <div class="flex items-center gap-2 text-amberGlow text-sm font-semibold mb-1">
-                        <i class="fa-solid fa-mug-saucer"></i> ROASTED COFFEE BEANS
+    <!-- About & Roasting Philosophy -->
+    <section id="about" class="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+        <div class="glass-panel rounded-3xl p-8 sm:p-12 border border-coffee-800 grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+            <div class="space-y-4">
+                <span class="text-amberGlow text-xs font-mono uppercase tracking-widest block">Roasting Philosophy</span>
+                <h3 class="font-serif text-2xl sm:text-3xl font-bold text-coffee-50">追求乾淨、透亮與純粹的甜感</h3>
+                <p class="text-xs sm:text-sm text-coffee-300 font-light leading-relaxed">
+                    Billy's Coffee 相信每一支優秀的咖啡豆都蘊含獨特的產區風土。我們採用精密熱風與半熱風烘焙曲線，精準控制一爆發展率與脫水期，完美保留花香、柑橘酸質與濃郁的餘韻甜感，拒絕任何焦苦味。
+                </p>
+                <div class="grid grid-cols-3 gap-4 pt-4 border-t border-coffee-800">
+                    <div>
+                        <div class="font-serif text-xl font-bold text-amberGlow">100%</div>
+                        <div class="text-[11px] text-coffee-400 mt-1">精品微批次豆</div>
                     </div>
-                    <h3 class="font-serif text-2xl sm:text-3xl font-bold text-coffee-50">手沖咖啡 SOE 菜單</h3>
-                </div>
-
-                <!-- Region Filter Pills -->
-                <div class="flex flex-wrap gap-2 text-xs" id="regionFilters">
-                    <button onclick="setFilter('ALL', this)" class="filter-btn active px-3.5 py-1.5 rounded-lg bg-amberGlow text-coffee-950 font-semibold transition shadow">全部 (13)</button>
-                    <button onclick="setFilter('Ethiopia', this)" class="filter-btn px-3.5 py-1.5 rounded-lg bg-coffee-900 hover:bg-coffee-800 text-coffee-300 border border-coffee-700/60 transition">埃塞俄比亞</button>
-                    <button onclick="setFilter('Colombia', this)" class="filter-btn px-3.5 py-1.5 rounded-lg bg-coffee-900 hover:bg-coffee-800 text-coffee-300 border border-coffee-700/60 transition">哥倫比亞</button>
-                    <button onclick="setFilter('Yunnan', this)" class="filter-btn px-3.5 py-1.5 rounded-lg bg-coffee-900 hover:bg-coffee-800 text-coffee-300 border border-coffee-700/60 transition">雲南</button>
-                    <button onclick="setFilter('Brazil', this)" class="filter-btn px-3.5 py-1.5 rounded-lg bg-coffee-900 hover:bg-coffee-800 text-coffee-300 border border-coffee-700/60 transition">巴西</button>
-                    <button onclick="setFilter('Indonesia', this)" class="filter-btn px-3.5 py-1.5 rounded-lg bg-coffee-900 hover:bg-coffee-800 text-coffee-300 border border-coffee-700/60 transition">印尼</button>
+                    <div>
+                        <div class="font-serif text-xl font-bold text-amberGlow">精準</div>
+                        <div class="text-[11px] text-coffee-400 mt-1">4:6 手沖導引</div>
+                    </div>
+                    <div>
+                        <div class="font-serif text-xl font-bold text-amberGlow">新鮮</div>
+                        <div class="text-[11px] text-coffee-400 mt-1">黃金賞味期烘焙</div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Roasted Beans Grid Container -->
-            <div id="roastedBeansGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Dynamically populated by JS -->
-            </div>
-        </section>
-
-        <section id="green-beans" class="space-y-8 pt-6">
-            <div class="border-b border-coffee-800/80 pb-6">
-                <div class="flex items-center gap-2 text-emerald-400 text-sm font-semibold mb-1">
-                    <i class="fa-solid fa-leaf"></i> RAW GREEN BEANS
-                </div>
-                <h3 class="font-serif text-2xl sm:text-3xl font-bold text-coffee-50">生豆 SOE 專區</h3>
-                <p class="text-xs sm:text-sm text-coffee-300 mt-1">專為自烘家、咖啡玩家預留的原裝精選高海拔生豆。</p>
-            </div>
-
-            <!-- Green Beans Grid Container -->
-            <div id="greenBeansGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Dynamically populated by JS -->
-            </div>
-        </section>
-
-        <section id="timer-section" class="glass-panel rounded-2xl p-6 sm:p-10 border border-coffee-700/40 relative overflow-hidden shadow-2xl">
-            <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-amberGlow/5 rounded-full blur-3xl pointer-events-none"></div>
-
-            <div class="max-w-4xl mx-auto space-y-8 relative z-10">
-                <div class="text-center space-y-2">
-                    <span class="inline-block px-3 py-1 rounded-full bg-amberGlow/10 text-amberGlow text-xs font-semibold uppercase tracking-wider">
-                        <i class="fa-solid fa-stopwatch"></i> Barista Assistant
+            <div class="relative h-72 sm:h-96 rounded-2xl overflow-hidden border border-coffee-700 shadow-2xl">
+                <img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?auto=format&fit=crop&w=800&q=80" alt="Roasting" class="w-full h-full object-cover" onerror="handleImageError(this)">
+                <div class="absolute inset-0 bg-gradient-to-t from-coffee-950 via-transparent to-transparent"></div>
+                <div class="absolute bottom-4 left-4 right-4 text-center">
+                    <span class="text-xs font-mono text-amberGlow bg-coffee-950/80 px-3 py-1 rounded-full border border-amberGlow/30">
+                        <i class="fa-solid fa-fire-flame-curved mr-1"></i> 職人手作烘焙與杯測鑑賞
                     </span>
-                    <h3 class="font-serif text-2xl sm:text-3xl font-bold text-coffee-50">Billy 4:6 比例手沖計時器</h3>
-                    <p class="text-xs sm:text-sm text-coffee-300 max-w-lg mx-auto">
-                        根據粕谷哲 (Tetsu Kasuya) 4:6 沖煮法設計。輸入咖啡粉重，系統將自動演算每段注水量與停頓節奏。
-                    </p>
-                </div>
-
-                <!-- Brew Parameters Calculator -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-coffee-950/70 p-4 rounded-xl border border-coffee-800/80">
-                    <div>
-                        <label class="block text-xs text-coffee-300 mb-1">咖啡粉重量 (g)</label>
-                        <div class="flex items-center bg-coffee-900 rounded-lg px-3 py-2 border border-coffee-700/60">
-                            <input type="number" id="coffeeDoseInput" value="15" min="10" max="40" oninput="calculateBrewPlan()" class="bg-transparent text-amberGlow font-bold text-lg w-full focus:outline-none">
-                            <span class="text-xs text-coffee-400">g</span>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-xs text-coffee-300 mb-1">粉水比例 (Ratio)</label>
-                        <div class="flex items-center bg-coffee-900 rounded-lg px-3 py-2 border border-coffee-700/60">
-                            <select id="brewRatioSelect" onchange="calculateBrewPlan()" class="bg-transparent text-coffee-100 text-sm w-full focus:outline-none">
-                                <option value="15" selected>1 : 15 (標準多層次)</option>
-                                <option value="16">1 : 16 (清爽高明亮度)</option>
-                                <option value="14">1 : 14 (濃郁厚實醇度)</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-xs text-coffee-300 mb-1">預計總注水量</label>
-                        <div class="flex items-center bg-coffee-900 rounded-lg px-3 py-2 border border-coffee-700/60">
-                            <span id="totalWaterDisplay" class="text-amberGlow font-bold text-lg w-full">225</span>
-                            <span class="text-xs text-coffee-400">ml/g</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Timer & Stage Display Container -->
-                <div class="flex flex-col md:flex-row items-center justify-between gap-8 bg-coffee-900/60 p-6 rounded-2xl border border-coffee-800">
-                    <!-- Main Digital Clock -->
-                    <div class="text-center md:text-left space-y-2">
-                        <div class="text-xs text-coffee-400 font-medium uppercase tracking-widest">Brew Timer</div>
-                        <div id="timerDisplay" class="font-mono text-5xl sm:text-6xl font-bold text-amberGlow amber-glow-text tracking-wider">
-                            00:00
-                        </div>
-                        <div id="timerStepInstruction" class="text-sm font-medium text-coffee-200">
-                            點擊「開始沖煮」進行悶蒸 (Bloom)
-                        </div>
-                    </div>
-
-                    <!-- Stage Progress Timeline -->
-                    <div class="w-full md:w-1/2 space-y-3">
-                        <div id="brewStagesContainer" class="space-y-2">
-                            <!-- Dynamically generated stage bars -->
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Timer Controls -->
-                <div class="flex items-center justify-center gap-4">
-                    <button id="startTimerBtn" onclick="toggleTimer()" class="px-8 py-3.5 rounded-xl bg-gradient-to-r from-amberGlow to-coffee-500 hover:from-amber-400 hover:to-coffee-400 text-coffee-950 font-bold text-base shadow-lg transition transform active:scale-95 flex items-center gap-2">
-                        <i id="timerBtnIcon" class="fa-solid fa-play"></i>
-                        <span id="timerBtnText">開始沖煮</span>
-                    </button>
-                    <button onclick="resetTimer()" class="px-6 py-3.5 rounded-xl bg-coffee-800 hover:bg-coffee-700 text-coffee-200 text-sm font-semibold border border-coffee-700 transition">
-                        <i class="fa-solid fa-rotate-right"></i> 重置
-                    </button>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-    </main>
-
-    <footer class="bg-coffee-950 border-t border-coffee-900 py-12 px-4 sm:px-6 lg:px-8 text-coffee-400 text-xs">
+    <!-- Footer -->
+    <footer class="mt-auto border-t border-coffee-800 bg-coffee-900/90 py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
-            <div class="space-y-2">
-                <div class="flex items-center justify-center md:justify-start gap-2">
-                    <i class="fa-solid fa-mug-hot text-amberGlow"></i>
-                    <span class="font-serif text-base font-bold text-coffee-200">Billy's Coffee</span>
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-amberGlow flex items-center justify-center text-coffee-950 font-bold text-sm">
+                    <i class="fa-solid fa-mug-hot"></i>
                 </div>
-                <p class="text-coffee-400">專注單一產區 SOE 精品手沖咖啡與優質原裝生豆</p>
+                <div>
+                    <span class="font-serif font-bold text-base text-coffee-100">Billy's Coffee</span>
+                    <p class="text-[11px] text-coffee-400">&copy; 2026 Billy's Coffee Roastery. All rights reserved.</p>
+                </div>
             </div>
 
-            <div class="flex flex-wrap justify-center gap-6 text-coffee-300 font-medium">
-                <span><i class="fa-solid fa-clock text-amberGlow/70 mr-1"></i> 營業時間：10:00 - 19:00</span>
-                <span><i class="fa-solid fa-location-dot text-amberGlow/70 mr-1"></i> 精品咖啡私廚吧檯</span>
-            </div>
-
-            <div class="text-coffee-500">
-                &copy; 2026 Billy's Coffee. All Rights Reserved.
+            <div class="text-xs text-coffee-300 space-y-1">
+                <p><i class="fa-solid fa-location-dot text-amberGlow mr-1.5"></i> 職人精品咖啡豆專門店 &bull; 支援現場預留與手沖指導</p>
+                <p class="text-[11px] text-coffee-400">嚴選 13 款手沖 SOE 熟豆與 5 款頂級生豆庫存</p>
             </div>
         </div>
     </footer>
 
-    <!-- Detail Modal -->
-    <div id="beanModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-coffee-950/80 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300" onclick="closeModalOnBackdrop(event)">
-        <div class="bg-coffee-900 border border-coffee-700/80 rounded-2xl max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-2xl relative transform scale-95 transition-transform duration-300" id="modalContainer">
-            <button onclick="closeModal()" class="absolute top-4 right-4 text-coffee-400 hover:text-coffee-100 p-2 text-lg">
-                <i class="fa-solid fa-xmark"></i>
+    <!-- Bean Detail Modal -->
+    <div id="beanModal" class="fixed inset-0 z-50 flex items-center justify-center bg-coffee-950/80 backdrop-blur-md opacity-0 pointer-events-none transition duration-300 px-4">
+        <div id="modalContainer" class="glass-panel w-full max-w-lg rounded-3xl p-6 sm:p-8 border border-amberGlow/40 relative transform scale-95 transition duration-300 shadow-2xl">
+            <button onclick="closeModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-coffee-900 border border-coffee-700 text-coffee-300 hover:text-amberGlow flex items-center justify-center transition">
+                <i class="fa-solid fa-xmark text-sm"></i>
             </button>
-
             <div id="modalContent">
-                <!-- Dynamically populated bean detail content -->
+                <!-- Dynamically populated -->
             </div>
         </div>
     </div>
 
-    <!-- Reservation Drawer -->
-    <div id="cartDrawer" class="fixed inset-0 z-50 bg-coffee-950/70 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300" onclick="closeDrawerOnBackdrop(event)">
-        <div id="drawerPanel" class="fixed right-0 top-0 bottom-0 w-full max-w-md bg-coffee-900 border-l border-coffee-800 p-6 flex flex-col justify-between transform translate-x-full transition-transform duration-300 shadow-2xl">
+    <!-- Reservation Cart Drawer -->
+    <div id="reservationDrawer" class="fixed inset-0 z-50 flex justify-end bg-coffee-950/80 backdrop-blur-sm opacity-0 pointer-events-none transition duration-300">
+        <div id="drawerPanel" class="w-full max-w-md bg-coffee-900 border-l border-coffee-800 h-full flex flex-col justify-between p-6 sm:p-8 transform translate-x-full transition duration-300 shadow-2xl">
             <div class="space-y-6">
                 <div class="flex items-center justify-between border-b border-coffee-800 pb-4">
-                    <div class="flex items-center gap-2 text-amberGlow font-serif font-bold text-lg">
-                        <i class="fa-solid fa-bag-shopping"></i>
-                        <span>豆單預留清單</span>
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-bag-shopping text-amberGlow"></i>
+                        <h4 class="font-serif font-bold text-lg text-coffee-100">我的咖啡豆預留清單</h4>
                     </div>
-                    <button onclick="toggleReservationDrawer()" class="text-coffee-400 hover:text-coffee-100 p-2">
-                        <i class="fa-solid fa-xmark text-lg"></i>
+                    <button onclick="closeReservationDrawer()" class="p-2 rounded-xl bg-coffee-800 hover:bg-coffee-700 text-coffee-300">
+                        <i class="fa-solid fa-xmark"></i>
                     </button>
                 </div>
 
-                <!-- Reservation Items List -->
-                <div id="cartItemsContainer" class="space-y-3 max-h-[55vh] overflow-y-auto pr-1">
-                    <!-- Cart items rendered here -->
+                <div id="cartItemsList" class="space-y-3 max-h-[60vh] overflow-y-auto pr-1">
+                    <!-- Dynamically populated -->
                 </div>
             </div>
 
-            <!-- Drawer Footer Action -->
-            <div class="border-t border-coffee-800 pt-4 space-y-4">
-                <div class="flex items-center justify-between text-sm">
-                    <span class="text-coffee-300">預留總品項數量</span>
-                    <span id="cartTotalItems" class="font-bold text-amberGlow">0 項</span>
+            <div class="pt-4 border-t border-coffee-800 space-y-4">
+                <div class="flex justify-between items-center text-sm">
+                    <span class="text-coffee-300">預留品項總計:</span>
+                    <span id="cartTotalItems" class="font-mono font-bold text-amberGlow text-base">0 品項</span>
                 </div>
-                <button onclick="submitReservation()" class="w-full py-3.5 rounded-xl bg-amberGlow hover:bg-amber-400 text-coffee-950 font-bold transition shadow-lg flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-paper-plane"></i>
-                    <span>送出預留登記</span>
+                <button onclick="submitReservation()" class="w-full py-3.5 rounded-xl bg-amberGlow hover:bg-amber-600 text-coffee-950 font-bold text-sm transition shadow-lg flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-check"></i> 確認送出預留申請
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Custom Toast Alert Component -->
-    <div id="toastNotification" class="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-coffee-900 border border-amberGlow/50 text-coffee-100 px-5 py-3.5 rounded-xl shadow-2xl opacity-0 pointer-events-none transform translate-y-4 transition-all duration-300">
-        <i id="toastIcon" class="fa-solid fa-circle-check text-amberGlow text-lg"></i>
-        <span id="toastMessage" class="text-xs font-medium"></span>
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 glass-panel border border-amberGlow/50 px-5 py-3 rounded-2xl shadow-2xl transform translate-y-24 opacity-0 transition duration-300 flex items-center gap-3">
+        <div id="toastIcon" class="w-6 h-6 rounded-full bg-amberGlow text-coffee-950 flex items-center justify-center text-xs font-bold">
+            <i class="fa-solid fa-check"></i>
+        </div>
+        <span id="toastMsg" class="text-xs font-medium text-coffee-100">已成功加入預留清單！</span>
     </div>
 
     <script>
+        // Define handleImageError globally at the very top of script execution
+        window.handleImageError = function(img) {
+            img.onerror = null;
+            img.src = "data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400' viewBox='0 0 600 400'%3E%3Crect width='600' height='400' fill='%2317120e'/%3E%3Cpath d='M300 140c-44.18 0-80 35.82-80 80s35.82 80 80 80 80-35.82 80-80-35.82-80-80-80zm0 130c-27.61 0-50-22.39-50-50s22.39-50 50-50 50 22.39 50 50-22.39 50-50 50z' fill='%23d97706' opacity='0.3'/%3E%3Ctext x='300' y='290' font-family='sans-serif' font-size='16' fill='%23a89078' text-anchor='middle'%3EBilly's Coffee Roastery%3C/text%3E%3C/svg%3E";
+        };
+
         const roastedBeans = [
             {
                 id: 'r1',
-                name: '埃塞俄比亞 耶加雪菲 孔加 G1',
+                name: '埃塞俄比亞 耶加雪菲 孔加 水洗G1',
                 region: 'Ethiopia',
-                process: '水洗',
+                process: 'waterfalls',
                 roastDate: '2026-03-31',
                 stockGrams: 101,
+                temp: '88°C - 90°C',
                 notes: ['茉莉花香', '柑橘', '檸檬塔', '清亮白桃'],
                 description: '經典孔加合作社出品，帶有奔放的白色花香與明亮優雅的柑橘酸甜感，餘韻潔淨優雅。',
                 image: 'https://images.unsplash.com/photo-1587734195503-904fca47e0e9?auto=format&fit=crop&w=600&q=80'
             },
             {
                 id: 'r2',
-                name: '埃塞俄比亞 耶加雪菲 果丁丁 G1',
+                name: '埃塞俄比亞 耶加雪菲果丁丁 G1 水洗',
                 region: 'Ethiopia',
-                process: '水洗',
+                process: 'waterfalls',
                 roastDate: '2026-03-30',
                 stockGrams: 120,
+                temp: '88°C - 90°C',
                 notes: ['佛手柑', '蜂蜜', '水蜜桃', '紅茶甜感'],
                 description: '果丁丁村微批次，風味極具精緻多汁質感，入口滿滿水蜜桃與佛手柑茶韻。',
                 image: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80'
@@ -415,9 +427,10 @@
                 id: 'r3',
                 name: '埃塞俄比亞 Lem Kaffa 瑰夏',
                 region: 'Ethiopia',
-                process: '水洗/原生種',
+                process: 'waterfalls',
                 roastDate: '2026-04-08',
                 stockGrams: 165,
+                temp: '89°C - 91°C',
                 notes: ['橙花', '野莓', '佛手柑', '蔗糖韻'],
                 description: '來自咖啡發源地卡法 (Kaffa) 的瑰夏原生品種，細緻的花香與高雅酸質交織。',
                 image: 'https://images.unsplash.com/photo-1498804103079-a6351b050096?auto=format&fit=crop&w=600&q=80'
@@ -426,9 +439,10 @@
                 id: 'r4',
                 name: '埃塞俄比亞 瑰夏',
                 region: 'Ethiopia',
-                process: '日曬',
+                process: 'sun',
                 roastDate: '2026-01-03',
                 stockGrams: 143,
+                temp: '88°C - 90°C',
                 notes: ['熱帶水果', '熟成葡萄', '藍莓', '紫羅蘭'],
                 description: '日曬處理帶出豐富的紫色水果風味與綿密甜感，果香濃郁充沛。',
                 image: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=600&q=80'
@@ -437,99 +451,108 @@
                 id: 'r5',
                 name: '埃塞俄比亞 班奇馬吉 瑰夏',
                 region: 'Ethiopia',
-                process: '水洗',
+                process: 'waterfalls',
                 roastDate: '2026-03-26',
                 stockGrams: 113,
+                temp: '89°C - 91°C',
                 notes: ['接骨木花', '杏仁', '黃葡萄柚', '清爽綠茶'],
                 description: '班奇馬吉高海拔野生林瑰夏，風味純淨透亮，帶有層次豐富的花茶感。',
-                image: 'https://images.unsplash.com/photo-1559525839-b18514d33500?auto=format&fit=crop&w=600&q=80'
+                image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=600&q=80'
             },
             {
                 id: 'r6',
-                name: '哥倫比亞 天堂92 瑰夏',
+                name: '哥倫比亞天堂92 瑰夏',
                 region: 'Colombia',
-                process: '雙重厭氧水洗',
+                process: 'waterfalls',
                 roastDate: '2026-07-29',
                 stockGrams: 46,
-                notes: ['水蜜桃可爾必思', '玫瑰花', '荔枝', '熱帶百香果'],
-                description: '知名莊園天堂92號微批次，科技控溫發酵帶來極致奔放的狂野果香與花香。',
+                temp: '88°C - 90°C',
+                notes: ['水蜜桃可爾必思', '玫瑰花', '荔枝', '百香果'],
+                description: '知名莊園天堂92號微批次，控溫發酵帶來極致奔放的狂野果香與花香。',
                 image: 'https://images.unsplash.com/photo-1509785307050-d4066910ec1e?auto=format&fit=crop&w=600&q=80'
             },
             {
                 id: 'r7',
-                name: '哥倫比亞 惠蘭',
+                name: '哥倫比亞惠蘭',
                 region: 'Colombia',
-                process: '水洗',
+                process: 'waterfalls',
                 roastDate: '2026-03-30',
                 stockGrams: 52,
+                temp: '90°C - 92°C',
                 notes: ['黑巧克力', '焦糖', '紅蘋果', '堅果'],
                 description: '惠蘭經典高海拔火山灰土壤風味，平衡沉穩，伴隨明亮紅蘋果酸甜與堅果餘韻。',
                 image: 'https://images.unsplash.com/photo-1447933601403-0c6688de566e?auto=format&fit=crop&w=600&q=80'
             },
             {
                 id: 'r8',
-                name: '巴西 莫吉安娜 皇后莊園 黄波旁 NY2',
+                name: '巴西 莫吉安娜 皇后庄园 黄波旁 NY2',
                 region: 'Brazil',
-                process: '日晒',
+                process: 'sun',
                 roastDate: '2026-08-02',
                 stockGrams: 90,
+                temp: '91°C - 93°C',
                 notes: ['烤花生', '奶油太妃糖', '榛果', '低酸度圓潤'],
                 description: '著名皇后莊園黃波旁，油脂感豐富，香濃甜潤，伴隨烤堅果與奶油太妃糖甜香。',
                 image: 'https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=600&q=80'
             },
             {
                 id: 'r9',
-                name: '雲南 錦慶 鐵皮卡',
+                name: '雲南錦慶鐵皮卡',
                 region: 'Yunnan',
-                process: '水洗',
+                process: 'waterfalls',
                 roastDate: '2026-06-22',
                 stockGrams: 55,
+                temp: '90°C - 92°C',
                 notes: ['紅糖', '青棗', '草本植物', '乾淨甜潤'],
                 description: '雲南保山優質古老鐵皮卡品種，甜感突出，伴隨草本植物與紅糖甘甜。',
                 image: 'https://images.unsplash.com/photo-1497515114629-f71d768fd07c?auto=format&fit=crop&w=600&q=80'
             },
             {
                 id: 'r10',
-                name: '雲南 勐馬鎮 卡蒂姆',
+                name: '雲南勐馬鎮 卡蒂姆',
                 region: 'Yunnan',
-                process: '日曬',
+                process: 'sun',
                 roastDate: '2026-05-29',
                 stockGrams: 14,
+                temp: '90°C - 92°C',
                 notes: ['發酵果香', '普洱茶韻', '黑糖', '堅果'],
                 description: '勐馬鎮微批次，日曬賦予濃厚發酵熟果氣息與深沉茶韻。',
                 image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=600&q=80'
             },
             {
                 id: 'r11',
-                name: '雲南 勐馬鎮 卡蒂姆 (厭氧)',
+                name: '雲南勐馬鎮 卡蒂姆 日曬 厭氧',
                 region: 'Yunnan',
-                process: '日曬 厭氧',
+                process: 'wine',
                 roastDate: '2026-07-21',
                 stockGrams: 73,
+                temp: '89°C - 91°C',
                 notes: ['朗姆酒', '酒釀櫻桃', '可可豆', '濃郁厚實'],
                 description: '厭氧發酵處理，釋放出迷人的朗姆酒香與熟成櫻桃風味，滑順濃郁。',
                 image: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80'
             },
             {
                 id: 'r12',
-                name: '雲南 孟連「小草莓」卡蒂姆',
+                name: '雲南孟连「小草莓」卡蒂姆',
                 region: 'Yunnan',
-                process: '日晒',
+                process: 'sun',
                 roastDate: '2026-08-03',
                 stockGrams: 70,
+                temp: '88°C - 90°C',
                 notes: ['草莓果醬', '粉紅葡萄柚', '乳酸飲料', '甜美高亢'],
                 description: '熱門獨特微批次「小草莓」，滿滿草莓冰淇淋與乳酸氣息，令人驚艷。',
                 image: 'https://images.unsplash.com/photo-1587734195503-904fca47e0e9?auto=format&fit=crop&w=600&q=80'
             },
             {
                 id: 'r13',
-                name: '印尼 黃金曼特寧',
+                name: '印尼黃金曼特靈',
                 region: 'Indonesia',
-                process: '濕剝法 / 水洗',
+                process: 'waterfalls',
                 roastDate: '2026-03-31',
                 stockGrams: 235,
+                temp: '91°C - 93°C',
                 notes: ['雪松木', '香料草本', '黑巧克力', '濃郁回甘'],
-                description: '三次人工手選黃金曼特寧，醇厚度極高，草本雪松香氣與苦甜黑巧克力餘韻綿長。',
+                description: '三次人工手選黃金曼特靈，醇厚度極高，草本雪松香氣與苦甜黑巧克力餘韻綿長。',
                 image: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=600&q=80'
             }
         ];
@@ -537,101 +560,95 @@
         const greenBeans = [
             {
                 id: 'g1',
-                name: '哥倫比亞 天堂92 瑰夏 (生豆)',
+                name: '哥倫比亞天堂92 瑰夏 (生豆)',
                 region: 'Colombia',
-                process: '水洗',
-                cropYear: '2026 Crop',
+                process: 'waterfalls',
+                cropYear: '2026 Q1',
                 stockGrams: 157,
-                notes: ['鮮綠生豆', '精品瑰夏微批次', '極高密度']
+                notes: ['鮮綠生豆', '精品瑰夏微批次', '極高密度'],
+                roastGuide: {
+                    machine: '家用浮風逆風式烘焙機 (Fluid-Bed / Air Roaster)',
+                    batchSize: '建議投入量：100g - 120g（確保熱風流動均勻、翻滾順暢）',
+                    profile: '瑰夏高密度豆需要溫和起步。建議先以 180°C 預熱，入豆後風速調至 7 成、火力中高 (85%) 迅速帶過脫水期 (約 4 分鐘達 150°C)；進入梅納反應期後適當降風溫以保留細緻花香。在一爆密集點 (約 9 分 30 秒，豆溫約 196°C) 後 45 秒下豆，保持明亮柑橘橙花風味。'
+                }
             },
             {
                 id: 'g2',
-                name: '巴西 莫吉安娜 皇后莊園 黄波旁 NY2 (生豆)',
+                name: '巴西 莫吉安娜 皇后庄园 黄波旁 NY2 (生豆)',
                 region: 'Brazil',
-                process: '日晒',
-                cropYear: '2026 Crop',
+                process: 'sun',
+                cropYear: '2026 Q1',
                 stockGrams: 178,
-                notes: ['高溫品質篩選', '甜潤波旁', '手烘首選']
+                notes: ['高溫品質篩選', '甜潤波旁', '手烘首選'],
+                roastGuide: {
+                    machine: '家用浮風逆風式烘焙機 (Fluid-Bed / Air Roaster)',
+                    batchSize: '建議投入量：120g - 150g',
+                    profile: '黃波旁含糖量高、油脂豐富。建議入豆溫 190°C，利用氣流強勁特性使豆子快速翻滾。脫水期維持中火力 (75%)，梅納反應期拉長，在一爆剛結束至一爆密集尾聲 (豆溫 201°C - 203°C) 之間下豆，可引出濃郁奶油太妃糖與烤堅果香。'
+                }
             },
             {
                 id: 'g3',
-                name: '雲南 孟連「小草莓」卡蒂姆 (生豆)',
+                name: '雲南孟连「小草莓」卡蒂姆 (生豆)',
                 region: 'Yunnan',
-                process: '日晒',
-                cropYear: '2026 Crop',
+                process: 'sun',
+                cropYear: '2026 Q1',
                 stockGrams: 388,
-                notes: ['強烈草莓發酵香', '特別精選豆', '極稀有']
+                notes: ['強烈草莓發酵香', '特別精選豆', '極稀有'],
+                roastGuide: {
+                    machine: '家用浮風逆風式烘焙機 (Fluid-Bed / Air Roaster)',
+                    batchSize: '建議投入量：100g',
+                    profile: '日曬與特殊發酵豆糖分焦糖化快、容易外焦內生。流風式烘焙機熱風對流強，適合以低溫入豆 (175°C)，初期風速拉高防止局部過熱。在一爆前溫和爬坡，一爆響起時調降熱風並在 200°C 左右果斷下豆，保留草莓果醬與乳酸氣息。'
+                }
             },
             {
                 id: 'g4',
-                name: '雲南 勐馬鎮 卡蒂姆 (生豆)',
+                name: '雲南勐馬鎮 卡蒂姆 (生豆)',
                 region: 'Yunnan',
-                process: '日曬',
-                cropYear: '2026 Crop',
+                process: 'sun',
+                cropYear: '2026 Q1',
                 stockGrams: 198,
-                notes: ['高海拔莊園', '日曬熟果韻', '飽滿均勻']
+                notes: ['高海拔莊園', '日曬熟果韻', '飽滿均勻'],
+                roastGuide: {
+                    machine: '家用浮風逆風式烘焙機 (Fluid-Bed / Air Roaster)',
+                    batchSize: '建議投入量：120g',
+                    profile: '建議預熱 185°C。卡蒂姆品種扎實，逆風式熱流可提供極佳傳熱效率。脫水時間抓 4 分 30 秒，進入一爆前適度降火力，在一爆結束後 30 秒下豆 (約 202°C)，展現沉穩普洱茶韻與黑糖甜感。'
+                }
             },
             {
                 id: 'g5',
-                name: '雲南 勐馬鎮 卡蒂姆 厭氧 (生豆)',
+                name: '雲南勐馬鎮 卡蒂姆 日曬 厭氧 (生豆)',
                 region: 'Yunnan',
-                process: '日曬 厭氧',
-                cropYear: '2026 Crop',
+                process: 'wine',
+                cropYear: '2026 Q1',
                 stockGrams: 238,
-                notes: ['控溫厭氧罐發酵', '朗姆酒甜感', '極致高分']
+                notes: ['控溫厭氧罐發酵', '朗姆酒甜感', '極致高分'],
+                roastGuide: {
+                    machine: '家用浮風逆風式烘焙機 (Fluid-Bed / Air Roaster)',
+                    batchSize: '建議投入量：100g',
+                    profile: '厭氧發酵豆香氣揮發快，切忌過度烘焙。建議 175°C 入豆，利用流風式均勻加熱優勢，以穩定中小火緩步推進。在一爆開始時密切注意風溫，一爆中段 (約 198°C) 即刻下豆，完美鎖住迷人朗姆酒香與酒釀櫻桃風味。'
+                }
             }
         ];
 
-        /* Application State */
-        let cart = [];
         let currentFilter = 'ALL';
         let searchQuery = '';
-        let timerInterval = null;
-        let timerSeconds = 0;
-        let isTimerRunning = false;
-        let currentStageIndex = 0;
+        let reservationCart = [];
 
-        document.addEventListener('DOMContentLoaded', () => {
-            renderRoastedBeans();
-            renderGreenBeans();
-            calculateBrewPlan();
-        });
-
-        function scrollToSection(sectionId) {
-            const section = document.getElementById(sectionId);
-            if (section) {
-                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
+        function getProcessIconSymbol(processCode) {
+            if (processCode === 'waterfalls') return 'fa-solid fa-water';
+            if (processCode === 'sun') return 'fa-solid fa-sun';
+            if (processCode === 'wine') return 'fa-solid fa-wine-glass';
+            return 'fa-solid fa-seedling';
         }
 
-        function handleImageError(imgElement) {
-            if (imgElement.dataset.failed) return;
-            imgElement.dataset.failed = "true";
-            const svgString = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400"><rect width="600" height="400" fill="#231408"/><path d="M260 160 C260 120, 340 120, 340 160 C340 200, 260 200, 260 240" stroke="#E5A93C" stroke-width="8" fill="none" opacity="0.6"/><circle cx="300" cy="260" r="12" fill="#E5A93C"/><text x="50%" y="82%" font-family="sans-serif" font-size="20" font-weight="bold" fill="#E8DCB8" text-anchor="middle">Billy's Specialty Coffee</text></svg>`;
-            imgElement.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgString);
+        function getProcessDisplayName(processCode) {
+            if (processCode === 'waterfalls') return '水洗';
+            if (processCode === 'sun') return '日曬';
+            if (processCode === 'wine') return '日曬厭氧';
+            return processCode;
         }
 
-        function showToast(message, isError = false) {
-            const toast = document.getElementById('toastNotification');
-            const icon = document.getElementById('toastIcon');
-            const msg = document.getElementById('toastMessage');
-
-            msg.textContent = message;
-            if (isError) {
-                icon.className = "fa-solid fa-circle-exclamation text-rose-400 text-lg";
-            } else {
-                icon.className = "fa-solid fa-circle-check text-amberGlow text-lg";
-            }
-
-            toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
-            toast.classList.add('opacity-100', 'translate-y-0');
-
-            setTimeout(() => {
-                toast.classList.remove('opacity-100', 'translate-y-0');
-                toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-4');
-            }, 3000);
-        }
-
+        // Render Roasted Beans
         function renderRoastedBeans() {
             const container = document.getElementById('roastedBeansGrid');
             container.innerHTML = '';
@@ -656,6 +673,7 @@
             }
 
             filtered.forEach(bean => {
+                const processIcon = getProcessIconSymbol(bean.process);
                 const card = document.createElement('div');
                 card.className = "glass-panel rounded-2xl overflow-hidden border border-coffee-800/80 hover:border-amberGlow/50 transition duration-300 flex flex-col justify-between group shadow-xl";
                 
@@ -665,8 +683,8 @@
                             <img src="${bean.image}" alt="${bean.name}" class="w-full h-full object-cover card-img-zoom" onerror="handleImageError(this)">
                             <div class="absolute inset-0 bg-gradient-to-t from-coffee-950 via-transparent to-transparent"></div>
                             
-                            <span class="absolute top-3 left-3 bg-coffee-950/80 backdrop-blur-md text-amberGlow border border-amberGlow/30 text-[11px] font-semibold px-2.5 py-1 rounded-full">
-                                ${bean.process}
+                            <span class="absolute top-3 left-3 bg-coffee-950/80 backdrop-blur-md text-amberGlow border border-amberGlow/30 text-[11px] font-semibold px-2.5 py-1 rounded-full flex items-center gap-1.5">
+                                <i class="${processIcon}"></i> ${getProcessDisplayName(bean.process)}
                             </span>
                             
                             <span class="absolute top-3 right-3 bg-coffee-900/90 text-coffee-200 text-[10px] px-2.5 py-1 rounded-full font-mono border border-coffee-700">
@@ -678,6 +696,11 @@
                             <h4 class="font-serif font-bold text-lg text-coffee-50 group-hover:text-amberGlow transition">
                                 ${bean.name}
                             </h4>
+
+                            <div class="flex items-center gap-2 text-xs text-amberGlow/90">
+                                <i class="fa-solid fa-temperature-three-quarters"></i>
+                                <span>建議水溫: <strong>${bean.temp}</strong></span>
+                            </div>
 
                             <div class="flex flex-wrap gap-1.5 pt-1">
                                 ${bean.notes.map(note => `<span class="bg-coffee-900 text-coffee-300 text-[11px] px-2 py-0.5 rounded border border-coffee-800">${note}</span>`).join('')}
@@ -709,19 +732,21 @@
             });
         }
 
+        // Render Green Beans
         function renderGreenBeans() {
             const container = document.getElementById('greenBeansGrid');
             container.innerHTML = '';
 
             greenBeans.forEach(bean => {
+                const processIcon = getProcessIconSymbol(bean.process);
                 const card = document.createElement('div');
                 card.className = "bg-coffee-900/80 border border-emerald-900/40 rounded-2xl p-5 hover:border-emerald-500/50 transition duration-300 flex flex-col justify-between space-y-4 shadow-lg";
                 
                 card.innerHTML = `
                     <div class="space-y-3">
                         <div class="flex items-center justify-between">
-                            <span class="bg-emerald-950/90 text-emerald-400 border border-emerald-800 text-[10px] font-semibold px-2.5 py-0.5 rounded-full">
-                                <i class="fa-solid fa-leaf text-[9px] mr-1"></i> ${bean.process}
+                            <span class="bg-emerald-950/90 text-emerald-400 border border-emerald-800 text-[10px] font-semibold px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                                <i class="${processIcon} text-[9px]"></i> ${getProcessDisplayName(bean.process)}
                             </span>
                             <span class="text-[10px] font-mono text-coffee-400">${bean.cropYear}</span>
                         </div>
@@ -730,6 +755,14 @@
 
                         <div class="flex flex-wrap gap-1.5">
                             ${bean.notes.map(n => `<span class="bg-coffee-950 text-emerald-300/80 text-[10px] px-2 py-0.5 rounded border border-emerald-950">${n}</span>`).join('')}
+                        </div>
+
+                        <div class="bg-coffee-950/80 p-3 rounded-xl border border-emerald-900/50 space-y-1.5 mt-2">
+                            <div class="text-[11px] font-bold text-emerald-400 flex items-center gap-1">
+                                <i class="fa-solid fa-wind"></i> ${bean.roastGuide.machine}
+                            </div>
+                            <div class="text-[10px] text-coffee-300 font-mono">${bean.roastGuide.batchSize}</div>
+                            <p class="text-[10px] text-coffee-300 leading-relaxed font-light">${bean.roastGuide.profile}</p>
                         </div>
                     </div>
 
@@ -747,35 +780,25 @@
             });
         }
 
-        function setFilter(region, btnElement) {
+        // Filtering & Search
+        function filterRegion(region) {
             currentFilter = region;
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active', 'bg-amberGlow', 'text-coffee-950', 'font-semibold');
-                btn.classList.add('bg-coffee-900', 'text-coffee-300');
+            document.querySelectorAll('.region-btn').forEach(btn => {
+                if (btn.dataset.region === region) {
+                    btn.className = "region-btn px-3 py-1.5 rounded-lg font-medium transition bg-amberGlow text-coffee-950";
+                } else {
+                    btn.className = "region-btn px-3 py-1.5 rounded-lg font-medium transition text-coffee-300 hover:text-white";
+                }
             });
-            btnElement.classList.add('active', 'bg-amberGlow', 'text-coffee-950', 'font-semibold');
-            btnElement.classList.remove('bg-coffee-900', 'text-coffee-300');
             renderRoastedBeans();
         }
 
-        function filterBeans() {
-            searchQuery = document.getElementById('searchInput').value;
-            const clearBtn = document.getElementById('clearSearchBtn');
-            if (searchQuery.length > 0) {
-                clearBtn.classList.remove('hidden');
-            } else {
-                clearBtn.classList.add('hidden');
-            }
+        function handleSearch(query) {
+            searchQuery = query;
             renderRoastedBeans();
         }
 
-        function clearSearch() {
-            document.getElementById('searchInput').value = '';
-            searchQuery = '';
-            document.getElementById('clearSearchBtn').classList.add('hidden');
-            renderRoastedBeans();
-        }
-
+        // Modal Controls
         function openBeanModal(beanId) {
             const bean = roastedBeans.find(b => b.id === beanId);
             if (!bean) return;
@@ -786,16 +809,17 @@
                     <div class="relative h-48 rounded-xl overflow-hidden border border-coffee-700">
                         <img src="${bean.image}" class="w-full h-full object-cover" onerror="handleImageError(this)">
                         <div class="absolute inset-0 bg-gradient-to-t from-coffee-950 via-transparent to-transparent"></div>
-                        <div class="absolute bottom-3 left-3">
-                            <span class="bg-amberGlow text-coffee-950 text-xs font-bold px-2.5 py-1 rounded-md">
-                                ${bean.region} SOE
+                        <div class="absolute bottom-3 left-3 flex items-center gap-2">
+                            <span class="bg-amberGlow text-coffee-950 text-xs font-bold px-2.5 py-1 rounded-md flex items-center gap-1">
+                                <i class="${getProcessIconSymbol(bean.process)}"></i> ${bean.region} SOE
                             </span>
                         </div>
                     </div>
 
                     <div class="space-y-2">
                         <h3 class="font-serif text-xl font-bold text-coffee-50">${bean.name}</h3>
-                        <p class="text-xs text-amberGlow font-mono">烘焙日期: ${bean.roastDate} &bull; 處理法: ${bean.process}</p>
+                        <p class="text-xs text-amberGlow font-mono">烘焙日期: ${bean.roastDate} &bull; 處理法: ${getProcessDisplayName(bean.process)}</p>
+                        <p class="text-xs text-coffee-200"><i class="fa-solid fa-temperature-three-quarters text-amberGlow mr-1"></i> 建議沖煮水溫：<strong>${bean.temp}</strong></p>
                     </div>
 
                     <p class="text-xs text-coffee-200 leading-relaxed bg-coffee-950/60 p-3.5 rounded-xl border border-coffee-800">
@@ -828,352 +852,274 @@
         function closeModal() {
             const modal = document.getElementById('beanModal');
             const modalContainer = document.getElementById('modalContainer');
+            modal.classList.add('opacity-0', 'pointer-events-none');
             modalContainer.classList.remove('scale-100');
             modalContainer.classList.add('scale-95');
-            modal.classList.add('opacity-0', 'pointer-events-none');
         }
 
-        function closeModalOnBackdrop(e) {
-            if (e.target.id === 'beanModal') closeModal();
-        }
-
-        function addToReservation(beanId, type) {
+        // Reservation Cart Logic
+        function addToReservation(id, type) {
             const list = type === 'roasted' ? roastedBeans : greenBeans;
-            const bean = list.find(b => b.id === beanId);
-            if (!bean) return;
+            const item = list.find(b => b.id === id);
+            if (!item) return;
 
-            const existingIndex = cart.findIndex(item => item.id === beanId);
-            if (existingIndex > -1) {
-                cart[existingIndex].qty += 1;
+            const existing = reservationCart.find(i => i.id === id);
+            if (existing) {
+                existing.qty += 1;
             } else {
-                cart.push({
-                    id: bean.id,
-                    name: bean.name,
-                    process: bean.process,
-                    type: type,
-                    qty: 1
-                });
+                reservationCart.push({ ...item, type, qty: 1 });
             }
 
             updateCartUI();
-            showToast(`已將「${bean.name}」加入預留清單`);
-        }
-
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            updateCartUI();
+            showToast(`已將 ${item.name} 加入預留清單！`);
         }
 
         function updateCartUI() {
-            const cartBadge = document.getElementById('cartBadge');
-            const container = document.getElementById('cartItemsContainer');
-            const totalDisplay = document.getElementById('cartTotalItems');
+            const badge = document.getElementById('cartBadge');
+            const totalItems = document.getElementById('cartTotalItems');
+            const cartList = document.getElementById('cartItemsList');
 
-            const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
-            cartBadge.textContent = totalCount;
-            cartBadge.style.opacity = totalCount > 0 ? '1' : '0';
-            totalDisplay.textContent = `${totalCount} 項`;
+            const totalCount = reservationCart.reduce((sum, i) => sum + i.qty, 0);
+            if (totalCount > 0) {
+                badge.textContent = totalCount;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
 
-            if (cart.length === 0) {
-                container.innerHTML = `
+            totalItems.textContent = `${totalCount} 品項`;
+
+            if (reservationCart.length === 0) {
+                cartList.innerHTML = `
                     <div class="py-12 text-center text-coffee-400 space-y-2">
                         <i class="fa-solid fa-bag-shopping text-3xl opacity-40"></i>
-                        <p class="text-xs">預留清單目前是空的。</p>
+                        <p class="text-xs">您的預留清單目前是空的。</p>
                     </div>
                 `;
                 return;
             }
 
-            container.innerHTML = '';
-            cart.forEach((item, idx) => {
-                const el = document.createElement('div');
-                el.className = "bg-coffee-950/80 p-3.5 rounded-xl border border-coffee-800 flex items-center justify-between text-xs";
-                el.innerHTML = `
+            cartList.innerHTML = '';
+            reservationCart.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = "bg-coffee-950 p-3.5 rounded-xl border border-coffee-800 flex items-center justify-between gap-3";
+                div.innerHTML = `
                     <div class="space-y-1">
-                        <div class="font-serif font-bold text-coffee-100">${item.name}</div>
-                        <div class="text-[10px] text-coffee-400">${item.process} (${item.type === 'roasted' ? '熟豆' : '生豆'})</div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-mono px-2 py-0.5 rounded ${item.type === 'roasted' ? 'bg-amber-950 text-amberGlow border border-amber-800' : 'bg-emerald-950 text-emerald-400 border border-emerald-800'}">
+                                ${item.type === 'roasted' ? '熟豆' : '生豆'}
+                            </span>
+                            <h5 class="font-serif font-bold text-xs text-coffee-100 line-clamp-1">${item.name}</h5>
+                        </div>
+                        <div class="text-[10px] text-coffee-400 font-mono">庫存剩餘: ${item.stockGrams}g</div>
                     </div>
-                    <div class="flex items-center gap-3">
-                        <span class="font-mono text-amberGlow font-bold">x${item.qty}</span>
-                        <button onclick="removeFromCart(${idx})" class="text-coffee-400 hover:text-rose-400 transition">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </button>
+                    <div class="flex items-center gap-2">
+                        <button onclick="changeCartQty(${index}, -1)" class="w-6 h-6 rounded bg-coffee-800 hover:bg-coffee-700 text-coffee-200 text-xs flex items-center justify-center">-</button>
+                        <span class="font-mono text-xs w-5 text-center text-coffee-100">${item.qty}</span>
+                        <button onclick="changeCartQty(${index}, 1)" class="w-6 h-6 rounded bg-coffee-800 hover:bg-coffee-700 text-coffee-200 text-xs flex items-center justify-center">+</button>
                     </div>
                 `;
-                container.appendChild(el);
+                cartList.appendChild(div);
             });
         }
 
-        function toggleReservationDrawer(forceOpen = false) {
-            const drawer = document.getElementById('cartDrawer');
-            const panel = document.getElementById('drawerPanel');
-
-            if (forceOpen || drawer.classList.contains('pointer-events-none')) {
-                drawer.classList.remove('opacity-0', 'pointer-events-none');
-                panel.classList.remove('translate-x-full');
-            } else {
-                drawer.classList.add('opacity-0', 'pointer-events-none');
-                panel.classList.add('translate-x-full');
+        function changeCartQty(index, delta) {
+            reservationCart[index].qty += delta;
+            if (reservationCart[index].qty <= 0) {
+                reservationCart.splice(index, 1);
             }
+            updateCartUI();
         }
 
-        function closeDrawerOnBackdrop(e) {
-            if (e.target.id === 'cartDrawer') toggleReservationDrawer();
+        function openReservationDrawer() {
+            const drawer = document.getElementById('reservationDrawer');
+            const panel = document.getElementById('drawerPanel');
+            drawer.classList.remove('opacity-0', 'pointer-events-none');
+            panel.classList.remove('translate-x-full');
+        }
+
+        function closeReservationDrawer() {
+            const drawer = document.getElementById('reservationDrawer');
+            const panel = document.getElementById('drawerPanel');
+            drawer.classList.add('opacity-0', 'pointer-events-none');
+            panel.classList.add('translate-x-full');
         }
 
         function submitReservation() {
-            if (cart.length === 0) {
-                showToast('預留清單為空，請先選擇咖啡豆', true);
+            if (reservationCart.length === 0) {
+                showToast('預留清單為空，請先加入品項！', true);
                 return;
             }
-            showToast('已成功登記預留！Billy 將會儘速為您留豆');
-            cart = [];
+            showToast('已成功送出預留申請！店長將盡快與您聯繫確認。');
+            reservationCart = [];
             updateCartUI();
-            toggleReservationDrawer();
+            closeReservationDrawer();
         }
 
-        let brewPlanStages = [];
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            const toastIcon = document.getElementById('toastIcon');
 
-        function calculateBrewPlan() {
-            const dose = parseFloat(document.getElementById('coffeeDoseInput').value) || 15;
-            const ratio = parseFloat(document.getElementById('brewRatioSelect').value) || 15;
-            const totalWater = Math.round(dose * ratio);
+            toastMsg.textContent = msg;
+            if (isError) {
+                toastIcon.className = 'w-6 h-6 rounded-full bg-red-600 text-white flex items-center justify-center text-xs font-bold';
+                toastIcon.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
+            } else {
+                toastIcon.className = 'w-6 h-6 rounded-full bg-amberGlow text-coffee-950 flex items-center justify-center text-xs font-bold';
+                toastIcon.innerHTML = '<i class="fa-solid fa-check"></i>';
+            }
 
-            document.getElementById('totalWaterDisplay').textContent = totalWater;
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 3500);
+        }
 
-            const stage1Water = Math.round(totalWater * 0.16);
-            const stage2Water = Math.round(totalWater * 0.24);
-            const stage3Water = Math.round(totalWater * 0.20);
-            const stage4Water = Math.round(totalWater * 0.20);
-            const stage5Water = totalWater - (stage1Water + stage2Water + stage3Water + stage4Water);
+        // Pour-Over Calculator & 4:6 Timer Logic
+        let timerInterval = null;
+        let totalSeconds = 0;
+        let isRunning = false;
 
-            brewPlanStages = [
-                { name: '1st Pour (悶蒸 Bloom)', water: stage1Water, duration: 45, text: `注入 ${stage1Water}g 熱水，均勻潤濕咖啡粉` },
-                { name: '2nd Pour (酸甜定位)', water: stage1Water + stage2Water, duration: 45, text: `續注至 ${stage1Water + stage2Water}g，提升風味明亮度` },
-                { name: '3rd Pour (萃取濃度)', water: stage1Water + stage2Water + stage3Water, duration: 45, text: `續注至 ${stage1Water + stage2Water + stage3Water}g` },
-                { name: '4th Pour (風味延伸)', water: stage1Water + stage2Water + stage3Water + stage4Water, duration: 45, text: `續注至 ${stage1Water + stage2Water + stage3Water + stage4Water}g` },
-                { name: '5th Pour (收尾滴濾)', water: totalWater, duration: 30, text: `注水至最終 ${totalWater}g，靜置等待完全滴濾` }
+        function updateCalculator() {
+            const grams = parseFloat(document.getElementById('coffeeGrams').value) || 20;
+            const ratio = parseFloat(document.getElementById('ratioSlider').value) || 15;
+            document.getElementById('ratioDisplay').textContent = ratio;
+
+            const totalWaterGrams = Math.round(grams * ratio);
+            document.getElementById('totalWater').textContent = totalWaterGrams + ' g';
+
+            const preference = document.getElementById('tastePreference').value;
+            let firstPour1, firstPour2;
+
+            if (preference === 'sweet') {
+                firstPour1 = Math.round(totalWaterGrams * 0.15);
+                firstPour2 = Math.round(totalWaterGrams * 0.25);
+            } else if (preference === 'acidic') {
+                firstPour1 = Math.round(totalWaterGrams * 0.25);
+                firstPour2 = Math.round(totalWaterGrams * 0.15);
+            } else {
+                firstPour1 = Math.round(totalWaterGrams * 0.20);
+                firstPour2 = Math.round(totalWaterGrams * 0.20);
+            }
+
+            const remainingWater = totalWaterGrams - (firstPour1 + firstPour2);
+            const thirdPour = Math.round(remainingWater / 3);
+            const fourthPour = totalWaterGrams - (firstPour1 + firstPour2 + thirdPour);
+
+            const steps = [
+                { time: '00:00', title: '第一段注水 (前 40% 調控酸甜)', water: firstPour1, cumulative: firstPour1, desc: '穩定細水流繞圈注水，帶出豐富香氣與乾淨口感。' },
+                { time: '00:45', title: '第二段注水 (完成 40% 區間)', water: firstPour2, cumulative: firstPour1 + firstPour2, desc: '等待水位降至一半後再次注水，決定濃度與甜感基調。' },
+                { time: '01:30', title: '第三段注水 (後 60% 第一發)', water: thirdPour, cumulative: firstPour1 + firstPour2 + thirdPour, desc: '開始均勻注水，萃取主體風味。' },
+                { time: '02:15', title: '第四段注水 (後 60% 第二發)', water: fourthPour, cumulative: totalWaterGrams - fourthPour, desc: '平穩注水，補充豐富層次。' },
+                { time: '03:00', title: '第五段注水 (收尾注水)', water: fourthPour, cumulative: totalWaterGrams, desc: '最後注水至總水量，等待濾杯流乾即完成萃取。' }
             ];
 
-            renderBrewStagesUI();
-        }
-
-        function renderBrewStagesUI() {
-            const container = document.getElementById('brewStagesContainer');
-            container.innerHTML = '';
-
-            brewPlanStages.forEach((stage, idx) => {
-                const stageEl = document.createElement('div');
-                const isCurrent = idx === currentStageIndex && isTimerRunning;
-                stageEl.className = `p-2.5 rounded-xl text-xs flex items-center justify-between border transition ${
-                    isCurrent 
-                        ? 'bg-amberGlow/20 border-amberGlow text-coffee-50 brew-active' 
-                        : 'bg-coffee-950/60 border-coffee-800 text-coffee-300'
-                }`;
-                stageEl.innerHTML = `
-                    <div class="flex items-center gap-2">
-                        <span class="w-5 h-5 rounded-full bg-coffee-800 text-amberGlow font-mono font-bold flex items-center justify-center text-[10px]">
-                            ${idx + 1}
-                        </span>
-                        <span>${stage.name}</span>
+            const listEl = document.getElementById('pourStepsList');
+            listEl.innerHTML = '';
+            steps.forEach((step, idx) => {
+                const row = document.createElement('div');
+                row.className = "bg-coffee-950 p-3 rounded-xl border border-coffee-800/80 flex items-center justify-between text-xs";
+                row.innerHTML = `
+                    <div class="space-y-0.5">
+                        <div class="font-bold text-coffee-100 flex items-center gap-2">
+                            <span class="font-mono text-amberGlow">#${idx+1} [${step.time}]</span> ${step.title}
+                        </div>
+                        <p class="text-[11px] text-coffee-400 font-light">${step.desc}</p>
                     </div>
-                    <div class="font-mono text-amberGlow font-bold">
-                        Target: ${stage.water}g
+                    <div class="text-right font-mono">
+                        <span class="text-amberGlow font-bold">+${step.water}g</span>
+                        <div class="text-[10px] text-coffee-400">累計 ${step.cumulative}g</div>
                     </div>
                 `;
-                container.appendChild(stageEl);
+                listEl.appendChild(row);
             });
         }
 
-        function toggleTimer() {
-            if (isTimerRunning) {
-                pauseTimer();
-            } else {
-                startTimer();
-            }
-        }
-
         function startTimer() {
-            isTimerRunning = true;
-            document.getElementById('timerBtnText').textContent = '暫停';
-            document.getElementById('timerBtnIcon').className = 'fa-solid fa-pause';
-
+            if (isRunning) return;
+            isRunning = true;
+            document.getElementById('startBtn').innerHTML = '<i class="fa-solid fa-play"></i> 進行中...';
+            
             timerInterval = setInterval(() => {
-                timerSeconds++;
-                updateTimerDisplay();
+                totalSeconds++;
+                const mins = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+                const secs = String(totalSeconds % 60).padStart(2, '0');
+                document.getElementById('timerDisplay').textContent = `${mins}:${secs}`;
             }, 1000);
         }
 
         function pauseTimer() {
-            isTimerRunning = false;
+            isRunning = false;
             clearInterval(timerInterval);
-            document.getElementById('timerBtnText').textContent = '繼續';
-            document.getElementById('timerBtnIcon').className = 'fa-solid fa-play';
+            document.getElementById('startBtn').innerHTML = '<i class="fa-solid fa-play"></i> 繼續計時';
         }
 
         function resetTimer() {
-            pauseTimer();
-            timerSeconds = 0;
-            currentStageIndex = 0;
-            document.getElementById('timerBtnText').textContent = '開始沖煮';
-            document.getElementById('timerBtnIcon').className = 'fa-solid fa-play';
-            updateTimerDisplay();
-            renderBrewStagesUI();
+            isRunning = false;
+            clearInterval(timerInterval);
+            totalSeconds = 0;
+            document.getElementById('timerDisplay').textContent = "00:00";
+            document.getElementById('startBtn').innerHTML = '<i class="fa-solid fa-play"></i> 開始計時';
         }
 
-        function updateTimerDisplay() {
-            const mins = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
-            const secs = String(timerSeconds % 60).padStart(2, '0');
-            document.getElementById('timerDisplay').textContent = `${mins}:${secs}`;
-
-            const stageIdx = Math.min(Math.floor(timerSeconds / 45), brewPlanStages.length - 1);
-            if (stageIdx !== currentStageIndex) {
-                currentStageIndex = stageIdx;
-                playStageChime();
-            }
-
-            renderBrewStagesUI();
-            if (brewPlanStages[currentStageIndex]) {
-                document.getElementById('timerStepInstruction').textContent = brewPlanStages[currentStageIndex].text;
-            }
-        }
-
-        let sharedAudioCtx = null;
+        // Real Coffee House Jazz Audio Stream
+        let sharedAudioEl = null;
         let isAudioPlaying = false;
-        let bgSynthTimer = null;
-
-        function getAudioContext() {
-            if (!sharedAudioCtx) {
-                sharedAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            if (sharedAudioCtx.state === 'suspended') {
-                sharedAudioCtx.resume();
-            }
-            return sharedAudioCtx;
-        }
-
-        function playStageChime() {
-            try {
-                const ctx = getAudioContext();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(587.33, ctx.currentTime);
-                gain.gain.setValueAtTime(0.15, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.8);
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                osc.start();
-                osc.stop(ctx.currentTime + 0.8);
-            } catch (e) {
-                console.error(e);
-            }
-        }
 
         function toggleAmbientSound() {
+            if (!sharedAudioEl) {
+                // Real streaming copyright-free slow coffee house jazz audio stream
+                sharedAudioEl = new Audio('https://stream.zeno.fm/f3wvbbqmdg8uv');
+                sharedAudioEl.loop = true;
+                sharedAudioEl.volume = 0.4;
+            }
+
             if (isAudioPlaying) {
-                stopAmbientSound();
+                sharedAudioEl.pause();
+                isAudioPlaying = false;
+                document.getElementById('audioStatusText').textContent = '慢調爵士音樂 : 關閉';
+                document.getElementById('audioDot').className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-coffee-500';
+                document.getElementById('audioPing').className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-coffee-400 opacity-0';
             } else {
-                startAmbientSound();
-            }
-        }
-
-        function startAmbientSound() {
-            const ctx = getAudioContext();
-            isAudioPlaying = true;
-
-            document.getElementById('audioStatusText').textContent = '慢調爵士音樂 : 播放中';
-            document.getElementById('audioDot').className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400';
-            document.getElementById('audioPing').className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75';
-
-            let step = 0;
-            // Relaxing 60 BPM Slow Coffee House Jazz Chords & Deep Upright Bass (100% Royalty Free)
-            const jazzProgression = [
-                // Cmaj9
-                { bass: 130.81, chord: [261.63, 329.63, 392.00, 493.88, 587.33] },
-                // A7b13
-                { bass: 110.00, chord: [246.94, 329.63, 370.00, 440.00, 523.25] },
-                // Dm9
-                { bass: 146.83, chord: [293.66, 349.23, 440.00, 523.25, 659.25] },
-                // G13
-                { bass: 98.00,  chord: [246.94, 329.63, 349.23, 440.00, 587.33] },
-                // Em7
-                { bass: 164.81, chord: [293.66, 329.63, 392.00, 493.88] },
-                // Ebdim7
-                { bass: 155.56, chord: [277.18, 311.13, 370.00, 440.00] },
-                // Dm9
-                { bass: 146.83, chord: [261.63, 329.63, 349.23, 440.00, 523.25] },
-                // Db7#11
-                { bass: 138.59, chord: [246.94, 277.18, 349.23, 415.30, 493.88] }
-            ];
-
-            function playJazzBar() {
-                if (!isAudioPlaying) return;
-                const currentBar = jazzProgression[step % jazzProgression.length];
-                const now = ctx.currentTime;
-
-                // 1. Smooth Deep Acoustic Jazz Bass Note
-                const bassOsc = ctx.createOscillator();
-                const bassGain = ctx.createGain();
-                const bassFilter = ctx.createBiquadFilter();
-                
-                bassOsc.type = 'sine';
-                bassOsc.frequency.setValueAtTime(currentBar.bass, now);
-                
-                bassFilter.type = 'lowpass';
-                bassFilter.frequency.setValueAtTime(220, now);
-
-                bassGain.gain.setValueAtTime(0.08, now);
-                bassGain.gain.exponentialRampToValueAtTime(0.0001, now + 3.6);
-
-                bassOsc.connect(bassFilter);
-                bassFilter.connect(bassGain);
-                bassGain.connect(ctx.destination);
-
-                bassOsc.start(now);
-                bassOsc.stop(now + 3.6);
-
-                // 2. Warm Electric Rhodes Piano Jazz Chords (Pure Signal, Zero Ambient Noise)
-                currentBar.chord.forEach((freq, idx) => {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    const filter = ctx.createBiquadFilter();
-
-                    osc.type = 'triangle';
-                    
-                    filter.type = 'lowpass';
-                    filter.frequency.setValueAtTime(1200, now);
-
-                    // Gentle strumming timing delay
-                    const strum = idx * 0.06;
-                    const startTime = now + strum;
-
-                    osc.frequency.setValueAtTime(freq, startTime);
-                    gain.gain.setValueAtTime(0.022, startTime);
-                    gain.gain.exponentialRampToValueAtTime(0.0001, startTime + 3.8);
-
-                    osc.connect(filter);
-                    filter.connect(gain);
-                    gain.connect(ctx.destination);
-
-                    osc.start(startTime);
-                    osc.stop(startTime + 3.8);
+                sharedAudioEl.play().then(() => {
+                    isAudioPlaying = true;
+                    document.getElementById('audioStatusText').textContent = '慢調爵士音樂 : 播放中';
+                    document.getElementById('audioDot').className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400';
+                    document.getElementById('audioPing').className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75';
+                }).catch(err => {
+                    showToast('無法自動播放音訊，請再點擊一次', true);
                 });
-
-                step++;
             }
-
-            playJazzBar();
-            bgSynthTimer = setInterval(playJazzBar, 4000);
         }
 
-        function stopAmbientSound() {
-            isAudioPlaying = false;
-            if (bgSynthTimer) clearInterval(bgSynthTimer);
-            document.getElementById('audioStatusText').textContent = '慢調爵士音樂 : 關閉';
-            document.getElementById('audioDot').className = 'relative inline-flex rounded-full h-2.5 w-2.5 bg-coffee-500';
-            document.getElementById('audioPing').className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-0';
+        // Smooth Scroll Helper
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth' });
+            }
         }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Close modal or drawer on Escape key
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+                closeReservationDrawer();
+            }
+        });
+
+        // Initialize on load
+        window.onload = function() {
+            renderRoastedBeans();
+            renderGreenBeans();
+            updateCalculator();
+        };
     </script>
 </body>
 </html>

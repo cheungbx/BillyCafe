@@ -219,7 +219,7 @@
                 <span class="text-amberGlow text-xs font-mono uppercase tracking-widest block mb-2">Brew Master Assistant</span>
                 <h3 class="font-serif text-2xl sm:text-4xl font-bold text-coffee-50">專業手沖計時與注水法計算器</h3>
                 <p class="text-xs sm:text-sm text-coffee-300 mt-2 font-light">
-                    現已支援四大經典手沖手法：Tetsu Kasuya 4:6 法、日本職人三刀流、河野式點滴悶蒸法與 1:1 黃金冰釀激流法，助您精準掌握每杯風味。
+                    現已支援多款經典手沖手法與 Hario Switch 閥門精密控制，助您精準掌握每杯風味。
                 </p>
             </div>
 
@@ -241,6 +241,9 @@
                             <option value="chemex">6. Chemex 緩速厚濾紙潔淨法 </option>
                             <option value="frenchPress">7. 法壓壺 (French Press) 浸泡萃取法 </option>
                             <option value="aeropress">8. 愛樂壓 (AeroPress) 倒沖浸泡壓濾法 </option>
+                            <option value="twoKnife">9. 兩段式註水法 (Two-Knife Method)</option>
+                            <option value="kasuyaSwitch">10. 粕谷哲的HARIO Switch沖法</option>
+                            <option value="emiSwitch" selected>11. Easy Hario Switch Recipe (Emi Fukahori)</option>
                         </select>
                     </div>
 
@@ -290,10 +293,10 @@
                         </div>
                     </div>
 
-                    <!-- Step breakdown list -->
+                    <!-- Step breakdown list (Increased size to display 6 steps without scrollbars) -->
                     <div class="space-y-3">
                         <h5 id="stepsHeaderTitle" class="text-xs font-mono uppercase tracking-wider text-coffee-400">分段注水指引與秒數</h5>
-                        <div id="pourStepsList" class="space-y-2.5 max-h-56 overflow-y-auto pr-1">
+                        <div id="pourStepsList" class="space-y-2.5 max-h-[460px] overflow-y-auto pr-1">
                             <!-- Populated via JS -->
                         </div>
                     </div>
@@ -317,7 +320,7 @@
                         <div class="text-[11px] text-coffee-400 mt-1">精品微批次豆</div>
                     </div>
                     <div>
-                        <div class="font-serif text-xl font-bold text-amberGlow">四大手法</div>
+                        <div class="font-serif text-xl font-bold text-amberGlow">多款手法</div>
                         <div class="text-[11px] text-coffee-400 mt-1">專業手沖計時引導</div>
                     </div>
                     <div>
@@ -353,7 +356,7 @@
             </div>
 
             <div class="text-xs text-coffee-300 space-y-1">
-                <p><i class="fa-solid fa-location-dot text-amberGlow mr-1.5"></i> 職人精品咖啡豆專門店 &bull; 支援現場預留與四大手沖法教學</p>
+                <p><i class="fa-solid fa-location-dot text-amberGlow mr-1.5"></i> 職人精品咖啡豆專門店 &bull; 支援現場預留與多款手沖法教學</p>
                 <p class="text-[11px] text-coffee-400">嚴選 13 款手沖 SOE 熟豆與 5 款頂級生豆庫存（附專屬浮風烘焙指南）</p>
             </div>
         </div>
@@ -1139,12 +1142,23 @@
             listEl.innerHTML = '';
             currentStepsData = [];
 
+            tastePrefContainer.style.display = 'block';
+            const preference = document.getElementById('tastePreference').value;
+
             if (method === 'threeKnife') {
-                tastePrefContainer.style.display = 'none';
                 headerTitle.textContent = '日本職人「三刀流」注水法指南 (大水柱/中水柱/細水柱)';
 
-                const firstWater = Math.round(totalWaterGrams * 0.20);
-                const secondWater = Math.round(totalWaterGrams * 0.50);
+                let firstWater, secondWater;
+                if (preference === 'sweet') {
+                    firstWater = Math.round(totalWaterGrams * 0.15);
+                    secondWater = Math.round(totalWaterGrams * 0.55);
+                } else if (preference === 'acidic') {
+                    firstWater = Math.round(totalWaterGrams * 0.25);
+                    secondWater = Math.round(totalWaterGrams * 0.45);
+                } else {
+                    firstWater = Math.round(totalWaterGrams * 0.20);
+                    secondWater = Math.round(totalWaterGrams * 0.50);
+                }
                 const thirdWater = totalWaterGrams - (firstWater + secondWater);
 
                 currentStepsData = [
@@ -1154,11 +1168,19 @@
                 ];
 
             } else if (method === 'konoDrop') {
-                tastePrefContainer.style.display = 'none';
                 headerTitle.textContent = '河野式「點滴悶蒸」極濃法指南 (極細流緩慢釋放)';
 
-                const bloomWater = Math.round(totalWaterGrams * 0.25);
-                const secondWater = Math.round(totalWaterGrams * 0.40);
+                let bloomWater, secondWater;
+                if (preference === 'sweet') {
+                    bloomWater = Math.round(totalWaterGrams * 0.20);
+                    secondWater = Math.round(totalWaterGrams * 0.45);
+                } else if (preference === 'acidic') {
+                    bloomWater = Math.round(totalWaterGrams * 0.30);
+                    secondWater = Math.round(totalWaterGrams * 0.35);
+                } else {
+                    bloomWater = Math.round(totalWaterGrams * 0.25);
+                    secondWater = Math.round(totalWaterGrams * 0.40);
+                }
                 const thirdWater = totalWaterGrams - (bloomWater + secondWater);
 
                 currentStepsData = [
@@ -1168,38 +1190,61 @@
                 ];
 
             } else if (method === 'iciclesFlow') {
-                tastePrefContainer.style.display = 'none';
                 headerTitle.textContent = '1:1 黃金「冰釀激流」法指南 (冰塊急冷鎖香)';
 
                 const iceWater = Math.round(totalWaterGrams * 0.40);
-                const hotBrewWater = totalWaterGrams - iceWater;
+                let hotBrewWater = totalWaterGrams - iceWater;
+                if (preference === 'sweet') {
+                    hotBrewWater = Math.round(totalWaterGrams * 0.55);
+                } else if (preference === 'acidic') {
+                    hotBrewWater = Math.round(totalWaterGrams * 0.65);
+                } else {
+                    hotBrewWater = Math.round(totalWaterGrams * 0.60);
+                }
+                const adjustedTotal = iceWater + hotBrewWater;
 
                 currentStepsData = [
                     { time: '00:00', title: '下壺鋪冰準備', water: 0, cumulative: 0, desc: `請在濾杯下壺預先放入約 ${Math.round(totalWaterGrams * 0.35)}g 的冰塊進行急速降溫冷萃。` },
                     { time: '00:15', title: '高溫熱水快速注水', water: hotBrewWater, cumulative: hotBrewWater, desc: '使用較細研磨度、92°C 熱水進行高濃度快速萃取，直接滴落至冰塊上瞬間鎖住花香。' },
-                    { time: '01:30', title: '均勻搖晃冰鎮', water: iceWater, cumulative: totalWaterGrams, desc: '待濾杯滴乾後，搖晃下壺使融冰與咖啡完美均質，冰涼享用。' }
+                    { time: '01:30', title: '均勻搖晃冰鎮', water: iceWater, cumulative: adjustedTotal, desc: '待濾杯滴乾後，搖晃下壺使融冰與咖啡完美均質，冰涼享用。' }
                 ];
 
             } else if (method === 'v60Classic') {
-                tastePrefContainer.style.display = 'none';
                 headerTitle.textContent = 'Hario V60 經典三段式注水法 (平衡清爽)';
 
-                const p1 = Math.round(totalWaterGrams * 0.20);
-                const p2 = Math.round(totalWaterGrams * 0.50);
+                let p1, p2;
+                if (preference === 'sweet') {
+                    p1 = Math.round(totalWaterGrams * 0.15);
+                    p2 = Math.round(totalWaterGrams * 0.55);
+                } else if (preference === 'acidic') {
+                    p1 = Math.round(totalWaterGrams * 0.25);
+                    p2 = Math.round(totalWaterGrams * 0.45);
+                } else {
+                    p1 = Math.round(totalWaterGrams * 0.20);
+                    p2 = Math.round(totalWaterGrams * 0.50);
+                }
                 const p3 = totalWaterGrams - (p1 + p2);
 
                 currentStepsData = [
-                    { time: '00:00', title: '悶蒸排氣', water: p1, cumulative: p1, desc: '注入 2 倍咖啡粉重的水量（約 40g），溫和繞圈悶蒸 35 秒。' },
-                    { time: '00:35', title: '第二段注水 (主體風味)', water: p2, cumulative: p1 + p2, desc: '由中心向外畫圓穩定注水至 70% 總水量，帶出豐富層次。' },
+                    { time: '00:00', title: '悶蒸排氣', water: p1, cumulative: p1, desc: '注入適量咖啡粉重的水量，溫和繞圈悶蒸 35 秒。' },
+                    { time: '00:35', title: '第二段注水 (主體風味)', water: p2, cumulative: p1 + p2, desc: '由中心向外畫圓穩定注水，帶出豐富層次。' },
                     { time: '01:20', title: '第三段收尾注水', water: p3, cumulative: totalWaterGrams, desc: '平穩注入剩餘水量至目標總重，輕晃濾杯後等待滴濾完成。' }
                 ];
 
             } else if (method === 'chemex') {
-                tastePrefContainer.style.display = 'none';
                 headerTitle.textContent = 'Chemex 緩速厚濾紙潔淨法 (極致純淨)';
 
-                const p1 = Math.round(totalWaterGrams * 0.25);
-                const p2 = Math.round(totalWaterGrams * 0.40);
+                let p1, p2;
+                if (preference === 'sweet') {
+                    p1 = Math.round(totalWaterGrams * 0.20);
+                    p2 = Math.round(totalWaterGrams * 0.45);
+                } else if (preference === 'acidic') {
+                    p1 = Math.round(totalWaterGrams * 0.30);
+                    p2 = Math.round(totalWaterGrams * 0.35);
+                } else {
+                    p1 = Math.round(totalWaterGrams * 0.25);
+                    p2 = Math.round(totalWaterGrams * 0.40);
+                }
                 const p3 = totalWaterGrams - (p1 + p2);
 
                 currentStepsData = [
@@ -1209,36 +1254,90 @@
                 ];
 
             } else if (method === 'frenchPress') {
-                tastePrefContainer.style.display = 'none';
                 headerTitle.textContent = '法壓壺 (French Press) 浸泡萃取法 (飽滿醇厚)';
 
+                let initialWater = totalWaterGrams;
                 currentStepsData = [
-                    { time: '00:00', title: '一次性注水浸泡', water: totalWaterGrams, cumulative: totalWaterGrams, desc: `使用粗研磨咖啡粉，一次性將 ${totalWaterGrams}g 熱水快速注入，使粉末完全浸泡。` },
-                    { time: '01:00', title: '表面粉蓋攪拌', water: 0, cumulative: totalWaterGrams, desc: '用湯匙輕輕攪拌浮在表面的粉層，使咖啡粉沉降。' },
-                    { time: '04:00', title: '壓下濾網享用', water: 0, cumulative: totalWaterGrams, desc: '靜置至 4 分鐘整，緩慢且平穩地將金屬濾網壓到底，即可倒出享用濃郁油脂。' }
+                    { time: '00:00', title: '一次性注水浸泡', water: initialWater, cumulative: initialWater, desc: `使用粗研磨咖啡粉，根據口感偏好調整，一次性將 ${initialWater}g 熱水快速注入。` },
+                    { time: '01:00', title: '表面粉蓋攪拌', water: 0, cumulative: initialWater, desc: '用湯匙輕輕攪拌浮在表面的粉層，使咖啡粉沉降。' },
+                    { time: '04:00', title: '壓下濾網享用', water: 0, cumulative: initialWater, desc: '靜置至 4 分鐘整，緩慢且平穩地將金屬濾網壓到底，即可倒出享用濃郁油脂。' }
                 ];
 
             } else if (method === 'aeropress') {
-                tastePrefContainer.style.display = 'none';
                 headerTitle.textContent = '愛樂壓 (AeroPress) 倒沖浸泡壓濾法';
 
-                const p1 = Math.round(totalWaterGrams * 0.60);
+                let p1;
+                if (preference === 'sweet') {
+                    p1 = Math.round(totalWaterGrams * 0.50);
+                } else if (preference === 'acidic') {
+                    p1 = Math.round(totalWaterGrams * 0.70);
+                } else {
+                    p1 = Math.round(totalWaterGrams * 0.60);
+                }
                 const p2 = totalWaterGrams - p1;
 
                 currentStepsData = [
-                    { time: '00:00', title: '倒置法注水浸泡', water: p1, cumulative: p1, desc: '愛樂壓倒置架設，加入咖啡粉與 60% 熱水，輕輕攪拌 10 秒。' },
+                    { time: '00:00', title: '倒置法注水浸泡', water: p1, cumulative: p1, desc: '愛樂壓倒置架設，加入咖啡粉與熱水，輕輕攪拌 10 秒。' },
                     { time: '01:00', title: '補滿剩餘水量並裝濾紙', water: p2, cumulative: totalWaterGrams, desc: '加滿剩餘熱水，旋上裝好濾紙的濾蓋。' },
                     { time: '01:45', title: '快速翻轉與下壓', water: 0, cumulative: totalWaterGrams, desc: '平穩將愛樂壓翻轉至分享壺上，花費 30 秒平穩向下施力壓出咖啡液。' }
                 ];
 
+            } else if (method === 'twoKnife') {
+                headerTitle.textContent = '兩段式註水法 (Two-Knife Method) 導引';
+
+                let firstWater;
+                if (preference === 'sweet') {
+                    firstWater = Math.round(totalWaterGrams * 0.35);
+                } else if (preference === 'acidic') {
+                    firstWater = Math.round(totalWaterGrams * 0.50);
+                } else {
+                    firstWater = Math.round(totalWaterGrams * 0.40);
+                }
+                const secondWater = totalWaterGrams - firstWater;
+
+                currentStepsData = [
+                    { time: '00:00', title: '第一段註水 (悶蒸與主體萃取)', water: firstWater, cumulative: firstWater, desc: '注入適量水量進行均勻悶蒸與前半段風味萃取，等待水位降下。' },
+                    { time: '01:00', title: '第二段註水 (平衡收尾)', water: secondWater, cumulative: totalWaterGrams, desc: '注入剩餘水量，平穩拉高甜感，等待滴濾完成。' }
+                ];
+
+            } else if (method === 'kasuyaSwitch') {
+                headerTitle.textContent = '粕谷哲的HARIO Switch沖法導引';
+
+                let w1, w2;
+                if (preference === 'sweet') {
+                    w1 = Math.round(totalWaterGrams * 0.25);
+                    w2 = Math.round(totalWaterGrams * 0.35);
+                } else if (preference === 'acidic') {
+                    w1 = Math.round(totalWaterGrams * 0.35);
+                    w2 = Math.round(totalWaterGrams * 0.25);
+                } else {
+                    w1 = Math.round(totalWaterGrams * 0.30);
+                    w2 = Math.round(totalWaterGrams * 0.30);
+                }
+                const w3 = totalWaterGrams - (w1 + w2);
+
+                currentStepsData = [
+                    { time: '00:00', title: '第一段注水 (閥門關閉)', water: w1, cumulative: w1, desc: '閥門關閉 (關閉)，注入第一段水量浸泡萃取。', valve: 'close' },
+                    { time: '01:00', title: '開啟閥門排乾', water: 0, cumulative: w1, desc: '閥門開啟 (開啟)，將第一段水完全排乾。', valve: 'open' },
+                    { time: '01:30', title: '第二段注水 (閥門關閉)', water: w2, cumulative: w1 + w2, desc: '閥門關閉 (關閉)，注入第二段水量進行浸泡。', valve: 'close' },
+                    { time: '02:15', title: '開啟閥門排乾', water: 0, cumulative: w1 + w2, desc: '閥門開啟 (開啟)，排乾第二段水。', valve: 'open' },
+                    { time: '02:45', title: '第三段注水 (閥門開啟直沖)', water: w3, cumulative: totalWaterGrams, desc: '閥門開啟 (開啟)，直接注水進行穿透式過濾收尾。', valve: 'open' }
+                ];
+
+            } else if (method === 'emiSwitch') {
+                headerTitle.textContent = 'Easy Hario Switch Recipe (Emi Fukahori) 導引';
+
+                currentStepsData = [
+                    { time: '00:00', title: '第一階段 (Blooming) – 關閉', water: 50, cumulative: 50, desc: '50 grams of water 關閉', valve: 'close' },
+                    { time: '00:30', title: '開啟閥門排乾/開啓', water: 63, cumulative: 113, desc: '開啓 after 30 seconds', valve: 'open' },
+                    { time: '01:10', title: '第二階段 (Pouring) – 開啟', water: 150, cumulative: 263, desc: '150 grams of water single continuous pour to the centre of the coffee bed.', valve: 'open' },
+                    { time: '02:20', title: '萃取完成', water: 0, cumulative: 263, desc: '2:20 total brew time', valve: 'open' }
+                ];
+
             } else {
-                // 4:6 Method
-                tastePrefContainer.style.display = 'block';
                 headerTitle.textContent = '4:6 階段注水指南';
 
-                const preference = document.getElementById('tastePreference').value;
                 let firstPour1, firstPour2;
-
                 if (preference === 'sweet') {
                     firstPour1 = Math.round(totalWaterGrams * 0.15);
                     firstPour2 = Math.round(totalWaterGrams * 0.25);
@@ -1263,21 +1362,33 @@
                 ];
             }
 
-            // Render elements with a unique id/class for progressive highlighting
+            // Render steps
             currentStepsData.forEach((step, idx) => {
                 const row = document.createElement('div');
                 row.id = `brew-step-${idx}`;
                 row.className = "bg-coffee-950 p-3 rounded-xl border border-coffee-800/80 flex items-center justify-between text-xs transition-all duration-300";
+                
+                let valveHtml = '';
+                if (step.valve === 'open') {
+                    valveHtml = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950 text-emerald-400 border border-emerald-800 mr-2">開啟</span>`;
+                } else if (step.valve === 'close') {
+                    valveHtml = `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-red-950 text-red-400 border border-red-800 mr-2">關閉</span>`;
+                }
+
+                // Display total water quantity in larger green fonts at all times for every step of every brew method
+                const cumulativeHtml = `<div class="cumulative-text text-emerald-400 font-bold text-base sm:text-lg" data-cumulative="${step.cumulative}">累計 ${step.cumulative}g</div>`;
+
                 row.innerHTML = `
                     <div class="space-y-0.5">
                         <div class="font-bold text-coffee-100 flex items-center gap-2">
+                            ${valveHtml}
                             <span class="font-mono text-amberGlow">#${idx+1} [${step.time}]</span> ${step.title}
                         </div>
                         <p class="text-[11px] text-coffee-400 font-light">${step.desc}</p>
                     </div>
                     <div class="text-right font-mono">
-                        <span class="text-amberGlow font-bold">${step.water > 0 ? '+' + step.water + 'g' : (step.cumulative > 0 ? '浸泡' : '準備')}</span>
-                        <div class="text-[10px] text-coffee-400">累計 ${step.cumulative}g</div>
+                        <span class="text-coffee-300 font-normal">${step.water > 0 ? '+' + step.water + 'g' : (step.cumulative > 0 ? '浸泡' : '準備')}</span>
+                        ${cumulativeHtml}
                     </div>
                 `;
                 listEl.appendChild(row);
@@ -1289,7 +1400,6 @@
         function highlightActiveStep() {
             if (!currentStepsData || currentStepsData.length === 0) return;
 
-            // Determine active step index based on current totalSeconds
             let activeIdx = 0;
             for (let i = 0; i < currentStepsData.length; i++) {
                 const stepSecs = parseTimeToSeconds(currentStepsData[i].time);
@@ -1298,19 +1408,15 @@
                 }
             }
 
-            // Update styles for each step item element
             currentStepsData.forEach((step, idx) => {
                 const rowEl = document.getElementById(`brew-step-${idx}`);
                 if (!rowEl) return;
 
                 if (idx === activeIdx) {
-                    // Active step highlight style
                     rowEl.className = "bg-coffee-900 p-3 rounded-xl border-2 border-amberGlow shadow-lg shadow-amber-950/40 flex items-center justify-between text-xs transition-all duration-300 scale-[1.01]";
                 } else if (idx < activeIdx) {
-                    // Completed step style (dimmed slightly)
                     rowEl.className = "bg-coffee-950/70 opacity-60 p-3 rounded-xl border border-coffee-800/60 flex items-center justify-between text-xs transition-all duration-300";
                 } else {
-                    // Upcoming step style
                     rowEl.className = "bg-coffee-950 p-3 rounded-xl border border-coffee-800/80 flex items-center justify-between text-xs transition-all duration-300";
                 }
             });
@@ -1327,7 +1433,6 @@
                 const secs = String(totalSeconds % 60).padStart(2, '0');
                 document.getElementById('timerDisplay').textContent = `${mins}:${secs}`;
                 
-                // Trigger step highlighting updates as timer progresses
                 highlightActiveStep();
             }, 1000);
         }
@@ -1376,7 +1481,6 @@
             }
         }
 
-        // Smooth Scroll Helper
         function scrollToSection(id) {
             const el = document.getElementById(id);
             if (el) {
